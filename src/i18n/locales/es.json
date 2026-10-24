@@ -2,10 +2,10 @@
   "nav": {
     "title": "AquaRescue",
     "tagline": "Monitoreo de Inundaciones con Rover y Respuesta de Emergencia",
-    "hackathon": "Seva Hackathon",
+    "hackathon": "AquaBots",
     "govCommand": "Comando Gubernamental",
     "publicPortal": "Portal Ciudadano",
-    "judgeTour": "Tour de Demostración",
+    "judgeTour": "Tour Interactivo de Demostración",
     "soundEnabled": "Alertas Sonoras Activadas",
     "soundMuted": "Alertas Sonoras Silenciadas",
     "resetBaseline": "Restablecer Datos de Demostración",
@@ -99,7 +99,7 @@
     "trackedDrive": "Tracción por Orugas 4x4",
     "dualBattery": "Baterías Dobles LiFePO4",
     "simulateObservation": "Simular Observación del Rover",
-    "judgeDemoTool": "Herramienta de Demostración",
+    "judgeDemoTool": "Simulación Interactiva",
     "simulateDesc": "Seleccione o aleatorice una observación de desastre. El rover toma una captura instantánea, registra coordenadas GPS, ejecuta la clasificación de prioridad y actualiza el mapa táctico.",
     "scenarioLabel": "Escenario #{{num}}: {{title}} ({{category}})",
     "deployScan": "Desplegar Escaneo",
@@ -259,9 +259,9 @@
     "dont4": "NO difunda rumores no confirmados en redes sociales."
   },
   "judgeTour": {
-    "title": "AquaRescue — Tour de Demostración para Evaluadores",
-    "subtitle": "Flujo Interactivo de Evaluación de 1 Clic para Seva Hackathon",
-    "welcome": "Bienvenido al tour de evaluación de AquaRescue. Puede probar cada pilar del sistema con los disparadores interactivos a continuación:",
+    "title": "DrainPulse — Tour Interactivo de Demostración",
+    "subtitle": "Flujo Interactivo de Evaluación de 1 Clic para AquaBots",
+    "welcome": "Bienvenido al tour interactivo de DrainPulse. Puede probar cada pilar del sistema con los disparadores interactivos a continuación:",
     "step1Title": "Paso 1 • Telemetría y Observación del Rover",
     "step1Heading": "Simular Nueva Observación del Rover",
     "step1Desc": "Ejecuta un escaneo óptico autónomo, activa el motor de priorización, actualiza el mapa y emite alerta sonora.",
@@ -308,8 +308,8 @@
   },
   "footer": {
     "tagline": "— Monitoreo de Inundaciones con Rover y Respuesta de Emergencia",
-    "builtFor": "Desarrollado para",
-    "sevaHackathon": "Seva Hackathon",
+    "builtFor": "Desarrollado por",
+    "sevaHackathon": "AquaBots",
     "telemetryEnabled": "• Telemetría de Borde y GPS RTK Activos"
   }
 }

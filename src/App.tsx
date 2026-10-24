@@ -30,7 +30,7 @@ const MainAppContent: React.FC = () => {
   const [isPriorityMatrixOpen, setIsPriorityMatrixOpen] = useState(false);
 
   React.useEffect(() => {
-    document.title = 'DrainPulse — Smart Storm-Drain Monitoring & Inspection Rover | Seva First 2026';
+    document.title = 'DrainPulse — Smart Storm-Drain Monitoring & Inspection Rover | AquaBots';
   }, []);
 
   const handleSelectIncident = (incident: Incident) => {
@@ -123,9 +123,8 @@ const MainAppContent: React.FC = () => {
             <span>— Smart Storm-Drain Monitoring & Inspection Rover</span>
           </div>
           <div className="flex items-center gap-1.5 text-slate-400">
-            <span>Team Innovators</span>
-            <span className="text-cyan-300 font-semibold">• Seva First Innovation Challenge 2026</span>
-            <span className="hidden md:inline">• Village & Panchayat Development</span>
+            <span>AquaBots</span>
+            <span className="text-cyan-300 font-semibold">• Village & Panchayat Development</span>
           </div>
         </div>
       </footer>

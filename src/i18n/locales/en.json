@@ -2,10 +2,10 @@
   "nav": {
     "title": "DrainPulse",
     "tagline": "Detect Blockages Early. Prevent Flooding Before It Starts.",
-    "hackathon": "Seva First 2026",
+    "hackathon": "AquaBots",
     "govCommand": "Live Monitor",
     "publicPortal": "Panchayat Portal",
-    "judgeTour": "Judge Demo Tour",
+    "judgeTour": "Interactive Demo Tour",
     "soundEnabled": "Sound Alerts Enabled",
     "soundMuted": "Sound Alerts Muted",
     "resetBaseline": "Reset Demo Baseline",
@@ -99,7 +99,7 @@
     "trackedDrive": "Tracked Drive 4x4",
     "dualBattery": "Dual LiFePO4 packs",
     "simulateObservation": "Simulate Rover Observation",
-    "judgeDemoTool": "Judge Demo Tool",
+    "judgeDemoTool": "Interactive Simulation",
     "simulateDesc": "Select or randomize a flood disaster observation. The rover immediately takes a snapshot, logs GPS coordinates, runs priority classification, and syncs the tactical map.",
     "scenarioLabel": "Scenario #{{num}}: {{title}} ({{category}})",
     "deployScan": "Deploy Scan",
@@ -259,9 +259,9 @@
     "dont4": "DO NOT spread unverified social media rumors."
   },
   "judgeTour": {
-    "title": "DrainPulse — Judge & Evaluator Demo Tour",
-    "subtitle": "Seva First Innovation Challenge 2026 • Team Innovators",
-    "welcome": "Welcome to the DrainPulse evaluation tour. You can test each core pillar of our smart storm-drain inspection platform with the 1-click interactive triggers below:",
+    "title": "DrainPulse — Interactive Platform Demo Tour",
+    "subtitle": "AquaBots • Smart Storm-Drain Inspection Platform",
+    "welcome": "Welcome to the DrainPulse interactive tour. You can test each core pillar of our smart storm-drain inspection platform with the 1-click interactive triggers below:",
     "step1Title": "Step 1 • Rover Telemetry & Observation",
     "step1Heading": "Simulate New Rover Observation",
     "step1Desc": "Fires an autonomous optical scan, triggers prioritization rule engine, updates map & logs sound alert.",
@@ -308,8 +308,8 @@
   },
   "footer": {
     "tagline": "— Rover Flood Monitoring & Emergency Operations",
-    "builtFor": "Built for",
-    "sevaHackathon": "Seva Hackathon",
+    "builtFor": "Developed by",
+    "sevaHackathon": "AquaBots",
     "telemetryEnabled": "• RTK GPS & Edge Telemetry Enabled"
   }
 }

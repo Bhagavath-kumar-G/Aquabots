@@ -308,7 +308,7 @@ export const RoverMonitor: React.FC = () => {
                 {t('rover.simulateObservation', 'Simulate Rover Observation')}
               </span>
               <span className="text-[10px] bg-cyan-900/60 text-cyan-200 px-1.5 py-0.5 rounded font-mono">
-                {t('rover.judgeDemoTool', 'Judge Demo Tool')}
+                {t('rover.judgeDemoTool', 'Interactive Simulation')}
               </span>
             </div>
             <p className="text-[11px] text-slate-300 leading-snug mb-2">

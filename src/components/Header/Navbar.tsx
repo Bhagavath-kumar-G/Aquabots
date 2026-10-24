@@ -58,11 +58,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   Drain<span className="text-cyan-400">Pulse</span>
                 </button>
-                <span className="hidden sm:inline-flex px-1.5 py-0.5 text-[9px] font-bold rounded bg-cyan-950 text-cyan-300 border border-cyan-800 uppercase tracking-wider font-mono">
-                  Seva First 2026
-                </span>
-                <span className="hidden md:inline-flex px-1.5 py-0.5 text-[9px] font-bold rounded bg-emerald-950 text-emerald-300 border border-emerald-800 uppercase tracking-wider font-mono">
-                  Team Innovators
+                <span className="hidden sm:inline-flex px-1.5 py-0.5 text-[9px] font-bold rounded bg-emerald-950 text-emerald-300 border border-emerald-800 uppercase tracking-wider font-mono">
+                  AquaBots
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 hidden lg:flex items-center gap-1.5">
@@ -120,14 +117,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* MULTILINGUAL LANGUAGE SELECTOR */}
             <LanguageSelector />
 
-            {/* Quick Judge Guide Tour Modal Trigger */}
+            {/* Quick Tour Modal Trigger */}
             <button
               onClick={onOpenJudgeGuide}
               className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition shadow-sm"
-              title={t('nav.judgeTour', 'Judge Demo Tour')}
+              title={t('nav.judgeTour', 'Interactive Demo Tour')}
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Evaluation Tour</span>
+              <span>Interactive Tour</span>
             </button>
 
             {/* Audio Alert Toggle */}

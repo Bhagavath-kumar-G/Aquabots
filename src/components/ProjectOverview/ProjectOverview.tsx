@@ -195,18 +195,18 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
           {/* Left Text Column */}
           <div className="lg:col-span-7 space-y-4">
             <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold uppercase tracking-wider">
+                AquaBots
+              </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-xs font-bold uppercase tracking-wider">
                 <Award className="w-3.5 h-3.5 text-cyan-400" />
-                Seva First Innovation Challenge 2026
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold uppercase tracking-wider">
-                Team Innovators
+                Autonomous Storm-Drain Inspection
               </span>
             </div>
 
             <div className="space-y-1">
               <div className="text-xs uppercase font-extrabold tracking-widest text-slate-400">
-                Theme: Village & Panchayat Development, Agriculture & Rural Economy
+                Village & Panchayat Development • Agriculture & Rural Economy
               </div>
               <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
                 DrainPulse
@@ -319,7 +319,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
 
         <div className="text-xs text-slate-400 flex items-center gap-1.5">
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          <span>Student Build Cost: <strong>&lt; ₹4,500 ($54 USD)</strong></span>
+          <span>Hardware Build Cost: <strong>&lt; ₹4,500 ($54 USD)</strong></span>
         </div>
       </div>
 
@@ -399,7 +399,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
         <section className="space-y-6">
           <div className="space-y-1">
             <span className="text-xs font-extrabold uppercase tracking-widest text-indigo-400">
-              Low-Cost Student Prototyping
+              Accessible Maker Prototyping
             </span>
             <h2 className="text-xl sm:text-2xl font-black text-white">
               Hardware Architecture & Component Stack
@@ -579,7 +579,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
               Impact on Village & Panchayat Development, Agriculture & Rural Economy
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 max-w-3xl">
-              DrainPulse addresses the core theme of the Seva First Innovation Challenge by delivering tangible, pro-poor civic technology that protects rural livelihoods and dignity.
+              DrainPulse addresses critical rural and panchayat drainage needs by delivering tangible, pro-poor civic technology that protects rural livelihoods and dignity.
             </p>
           </div>
 
