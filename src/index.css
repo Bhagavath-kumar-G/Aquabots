@@ -88,3 +88,28 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* RTL (Arabic, Urdu, Persian, Hebrew) layout enhancements */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .leaflet-container {
+  direction: ltr !important; /* Keep map coordinates, controls & tile panning standard LTR */
+}
+
+/* Indic & Non-Latin typography line-height breathing room */
+html[lang="ta"], 
+html[lang="hi"], 
+html[lang="te"], 
+html[lang="kn"], 
+html[lang="ml"], 
+html[lang="bn"], 
+html[lang="mr"], 
+html[lang="gu"], 
+html[lang="pa"], 
+html[lang="or"], 
+html[lang="ar"], 
+html[lang="ur"] {
+  letter-spacing: 0.01em;
+}

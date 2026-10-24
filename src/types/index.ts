@@ -35,7 +35,7 @@ export interface Incident {
   thumbnailUrl?: string;
   reportedAt: string;
   updatedAt: string;
-  source: 'AquaRover Mark-IV' | 'AquaRover Mark-II' | 'Citizen Report' | 'Aerial Drone';
+  source: 'DrainPulse RP-1' | 'DrainPulse ESP32 Rover' | 'AquaRover Mark-IV' | 'AquaRover Mark-II' | 'Citizen Report' | 'Aerial Drone';
   priorityReason: string;
   safetyGuidelines: string[];
   assignedTeam?: string;
@@ -72,7 +72,7 @@ export interface AppNotification {
   title: string;
   message: string;
   timestamp: string;
-  severity: 'Critical' | 'High' | 'Medium' | 'Info';
+  severity: 'Critical' | 'High' | 'Medium' | 'Low' | 'Info';
   read: boolean;
   incidentId?: string;
 }
@@ -90,4 +90,4 @@ export interface ReliefShelter {
   isOpen: boolean;
 }
 
-export type AppViewMode = 'command' | 'public';
+export type AppViewMode = 'command' | 'overview' | 'public';

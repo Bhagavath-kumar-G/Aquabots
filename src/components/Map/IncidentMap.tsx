@@ -1,20 +1,13 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useApp } from '../../context/AppContext';
-import type { Incident, Severity } from '../../types';
+import type { Incident } from '../../types';
 import { 
   Compass, 
   Layers, 
-  ExternalLink, 
-  Radio, 
-  AlertTriangle, 
-  Eye, 
-  Copy, 
-  Check, 
-  Droplets, 
-  Users,
-  ShieldAlert
+  Droplets
 } from 'lucide-react';
 
 interface IncidentMapProps {
@@ -22,6 +15,7 @@ interface IncidentMapProps {
 }
 
 export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) => {
+  const { t } = useTranslation();
   const { 
     incidents, 
     rover, 
@@ -40,7 +34,6 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
 
   const [mapStyle, setMapStyle] = useState<'streets' | 'dark' | 'satellite'>('streets');
   const [showFloodHazardZones, setShowFloodHazardZones] = useState<boolean>(true);
-  const [copiedCoords, setCopiedCoords] = useState<string | null>(null);
   const floodZonesLayerRef = useRef<L.LayerGroup | null>(null);
 
   // Filter incidents for map display
@@ -156,13 +149,6 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
     floodZonesLayerRef.current.addLayer(velacheryDepression);
   }, [showFloodHazardZones]);
 
-  // Copy coordinates helper
-  const handleCopyCoords = (lat: number, lng: number) => {
-    const text = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-    navigator.clipboard.writeText(text);
-    setCopiedCoords(text);
-    setTimeout(() => setCopiedCoords(null), 2000);
-  };
 
   // Helper to build marker HTML
   const getMarkerIcon = (incident: Incident) => {
@@ -236,6 +222,9 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
         incident.status === 'Acknowledged' ? 'bg-amber-100 text-amber-800 border-amber-300' :
         'bg-rose-100 text-rose-800 border-rose-300';
 
+      const transSeverity = t(`severity.${incident.severity}`, incident.severity);
+      const transStatus = t(`status.${incident.status}`, incident.status);
+
       const popupHtml = `
         <div class="w-72 bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-200 font-sans">
           <div class="relative h-28 bg-slate-900 overflow-hidden">
@@ -243,10 +232,10 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent"></div>
             <div class="absolute top-2 left-2 flex gap-1.5 items-center">
               <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md ${severityColor} shadow">
-                ${incident.severity}
+                ${transSeverity}
               </span>
               <span class="px-2 py-0.5 text-[10px] font-semibold rounded-md border ${statusColor}">
-                ${incident.status}
+                ${transStatus}
               </span>
             </div>
             <div class="absolute bottom-2 left-2 right-2 text-white">
@@ -263,15 +252,15 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
             
             <div class="grid grid-cols-2 gap-2 bg-slate-50 p-2 rounded-lg border border-slate-100 text-[11px]">
               <div>
-                <span class="text-slate-400 block text-[9px] uppercase tracking-wider">Water Depth</span>
+                <span class="text-slate-400 block text-[9px] uppercase tracking-wider">${t('map.waterDepth', 'Water Depth')}</span>
                 <span class="font-bold text-sky-700 flex items-center gap-1">
                   🌊 ${incident.waterDepthMeters.toFixed(2)} m
                 </span>
               </div>
               <div>
-                <span class="text-slate-400 block text-[9px] uppercase tracking-wider">Stranded</span>
+                <span class="text-slate-400 block text-[9px] uppercase tracking-wider">${t('map.stranded', 'Stranded')}</span>
                 <span class="font-bold ${incident.trappedCount > 0 ? 'text-red-600' : 'text-slate-700'} flex items-center gap-1">
-                  👥 ${incident.trappedCount > 0 ? `${incident.trappedCount} Persons` : 'None reported'}
+                  👥 ${incident.trappedCount > 0 ? `${incident.trappedCount} ${t('incidents.persons', { count: incident.trappedCount, defaultValue: 'Persons' })}` : t('map.noneReported', 'None reported')}
                 </span>
               </div>
             </div>
@@ -289,13 +278,13 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
                 class="flex items-center justify-center gap-1 py-1.5 px-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-medium rounded-lg text-[11px] transition"
               >
                 <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                Google Maps
+                ${t('map.googleMaps', 'Google Maps')}
               </a>
               <button 
                 id="popup-inspect-btn-${incident.id}"
                 class="flex items-center justify-center gap-1 py-1.5 px-2 bg-cyan-600 hover:bg-cyan-700 text-white font-medium rounded-lg text-[11px] transition shadow-sm"
               >
-                Inspect SOP
+                ${t('map.inspectSop', 'Inspect SOP')}
               </button>
             </div>
           </div>
@@ -452,9 +441,9 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
         {/* Left Badge: Live Operational GIS */}
         <div className="pointer-events-auto flex items-center gap-2 bg-slate-900/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-slate-700/60 shadow-xl text-white">
           <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></div>
-          <span className="text-xs font-bold tracking-tight">AquaRescue Tactical Map</span>
+          <span className="text-xs font-bold tracking-tight">{t('map.tacticalMap', 'DrainPulse Tactical Culvert Map')}</span>
           <span className="text-[10px] bg-cyan-950 text-cyan-300 font-mono px-2 py-0.5 rounded border border-cyan-800">
-            {displayedIncidents.length} Markers Active
+            {t('map.markersActive', { count: displayedIncidents.length, defaultValue: `${displayedIncidents.length} Markers Active` })}
           </span>
         </div>
 
@@ -468,7 +457,7 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
                 mapStyle === 'streets' ? 'bg-cyan-500 text-slate-950 font-bold shadow' : 'hover:text-white'
               }`}
             >
-              Street
+              {t('map.street', 'Street')}
             </button>
             <button
               onClick={() => setMapStyle('dark')}
@@ -476,7 +465,7 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
                 mapStyle === 'dark' ? 'bg-cyan-500 text-slate-950 font-bold shadow' : 'hover:text-white'
               }`}
             >
-              Tactical
+              {t('map.tactical', 'Tactical')}
             </button>
             <button
               onClick={() => setMapStyle('satellite')}
@@ -484,7 +473,7 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
                 mapStyle === 'satellite' ? 'bg-cyan-500 text-slate-950 font-bold shadow' : 'hover:text-white'
               }`}
             >
-              Satellite
+              {t('map.satellite', 'Satellite')}
             </button>
           </div>
 
@@ -501,7 +490,7 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
             }`}
           >
             <Droplets className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline text-[11px]">Flood Ingress</span>
+            <span className="hidden sm:inline text-[11px]">{t('map.floodIngress', 'Flood Ingress')}</span>
           </button>
 
           {/* Focus Rover */}
@@ -511,13 +500,13 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
             className="px-2.5 py-1 bg-cyan-600/20 hover:bg-cyan-600/40 text-cyan-300 border border-cyan-500/40 rounded-lg text-[11px] font-medium flex items-center gap-1 transition"
           >
             <Compass className="w-3.5 h-3.5" />
-            <span>Rover Mark-IV</span>
+            <span>{t('map.roverMarkIV', 'Rover Mark-IV')}</span>
           </button>
 
           {/* Fit Bounds */}
           <button
             onClick={handleFitAllIncidents}
-            title="Fit All Hazards in View"
+            title={t('map.fitAll', 'Fit All Hazards in View')}
             className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition"
           >
             <Layers className="w-3.5 h-3.5" />
@@ -527,35 +516,29 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
 
       {/* Bottom Floating Legend Bar */}
       <div className="absolute bottom-3 left-3 z-[400] bg-slate-900/90 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-700/60 shadow-xl text-white text-[11px] flex items-center gap-3">
-        <span className="text-slate-400 font-semibold text-[10px] uppercase tracking-wider">Severity:</span>
+        <span className="text-slate-400 font-semibold text-[10px] uppercase tracking-wider">{t('map.severity', 'Severity')}:</span>
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-red-600 shadow-sm shadow-red-500"></span>
-          <span className="font-medium text-red-300">Critical</span>
+          <span className="font-medium text-red-300">{t('map.critical', 'Critical')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-sm shadow-amber-400"></span>
-          <span className="font-medium text-amber-300">High</span>
+          <span className="font-medium text-amber-300">{t('map.high', 'High')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-sky-500 shadow-sm shadow-sky-400"></span>
-          <span className="font-medium text-sky-300">Medium</span>
+          <span className="font-medium text-sky-300">{t('map.medium', 'Medium')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-400"></span>
-          <span className="font-medium text-emerald-300">Low / Clear</span>
+          <span className="font-medium text-emerald-300">{t('map.lowClear', 'Low / Clear')}</span>
         </div>
         <div className="hidden md:flex items-center gap-1.5 pl-2 border-l border-slate-700">
           <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></div>
-          <span className="text-cyan-300 font-mono text-[10px]">🤖 Autonomous Rover</span>
+          <span className="text-cyan-300 font-mono text-[10px]">🤖 {t('map.autonomousRover', 'Autonomous Rover')}</span>
         </div>
       </div>
 
-      {/* Copy notification popup */}
-      {copiedCoords && (
-        <div className="absolute top-14 left-1/2 -translate-x-1/2 z-[500] bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-full shadow-xl flex items-center gap-1 font-medium animate-fade-in">
-          <Check className="w-3.5 h-3.5" /> Coordinates {copiedCoords} copied!
-        </div>
-      )}
     </div>
   );
 };

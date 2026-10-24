@@ -1,20 +1,14 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useApp } from '../../context/AppContext';
 import type { Incident, Severity, IncidentStatus } from '../../types';
 import { 
   AlertTriangle, 
   MapPin, 
-  Droplets, 
-  Users, 
   ExternalLink, 
   Search, 
-  Filter, 
   ShieldAlert, 
-  CheckCircle2, 
-  Clock, 
-  ChevronRight,
-  Layers,
-  ArrowUpDown
+  ChevronRight
 } from 'lucide-react';
 
 interface IncidentListProps {
@@ -26,6 +20,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
   onSelectIncident,
   onOpenPriorityMatrix 
 }) => {
+  const { t } = useTranslation();
   const { 
     incidents, 
     filterSeverity, 
@@ -93,14 +88,18 @@ export const IncidentList: React.FC<IncidentListProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-lg font-bold text-slate-900 tracking-tight">
-                Disaster Incidents & Dispatch Log
+                {t('incidents.dispatchLog', 'Disaster Incidents & Dispatch Log')}
               </h2>
               <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold">
-                {filteredIncidents.length} of {incidents.length}
+                {t('incidents.filterCounts', { 
+                  filtered: filteredIncidents.length, 
+                  total: incidents.length,
+                  defaultValue: `${filteredIncidents.length} of ${incidents.length}` 
+                })}
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Rover detections, citizen SOS alerts, and emergency triage status
+              {t('incidents.subtitle', 'Rover detections, citizen SOS alerts, and emergency triage status')}
             </p>
           </div>
 
@@ -109,10 +108,10 @@ export const IncidentList: React.FC<IncidentListProps> = ({
             <button
               onClick={onOpenPriorityMatrix}
               className="px-3 py-1.5 rounded-xl bg-cyan-50 hover:bg-cyan-100 text-cyan-800 text-xs font-semibold flex items-center gap-1.5 border border-cyan-200 transition"
-              title="Inspect Prioritization Rules"
+              title={t('incidents.prioritizationRules', 'Prioritization Rules')}
             >
               <ShieldAlert className="w-3.5 h-3.5 text-cyan-600" />
-              <span>Prioritization Rules</span>
+              <span>{t('incidents.prioritizationRules', 'Prioritization Rules')}</span>
             </button>
 
             <div className="bg-slate-100 p-1 rounded-xl flex items-center gap-1 text-xs">
@@ -122,7 +121,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
                   viewFormat === 'cards' ? 'bg-white shadow text-slate-900 font-bold' : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
-                Cards
+                {t('incidents.cards', 'Cards')}
               </button>
               <button
                 onClick={() => setViewFormat('table')}
@@ -130,7 +129,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
                   viewFormat === 'table' ? 'bg-white shadow text-slate-900 font-bold' : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
-                Table
+                {t('incidents.table', 'Table')}
               </button>
             </div>
           </div>
@@ -143,7 +142,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search by location, hazard, ward..."
+              placeholder={t('incidents.searchPlaceholder', 'Search by location, hazard, ward...')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-3 py-2 bg-slate-50 hover:bg-slate-100/70 focus:bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition"
@@ -160,19 +159,25 @@ export const IncidentList: React.FC<IncidentListProps> = ({
 
           {/* Severity filter (3 cols) */}
           <div className="md:col-span-3 flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
-            {['All', 'Critical', 'High', 'Medium', 'Low'].map((sev) => (
-              <button
-                key={sev}
-                onClick={() => setFilterSeverity(sev)}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 ${
-                  filterSeverity === sev
-                    ? 'bg-slate-900 text-white shadow'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
-                }`}
-              >
-                {sev}
-              </button>
-            ))}
+            {['All', 'Critical', 'High', 'Medium', 'Low'].map((sev) => {
+              const label = sev === 'All' 
+                ? t('incidents.all', 'All') 
+                : t(`severity.${sev}`, sev);
+
+              return (
+                <button
+                  key={sev}
+                  onClick={() => setFilterSeverity(sev)}
+                  className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 ${
+                    filterSeverity === sev
+                      ? 'bg-slate-900 text-white shadow'
+                      : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
           </div>
 
           {/* Status filter (2 cols) */}
@@ -182,11 +187,11 @@ export const IncidentList: React.FC<IncidentListProps> = ({
               onChange={(e) => setFilterStatus(e.target.value)}
               className="w-full py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 font-medium focus:outline-none focus:border-cyan-500"
             >
-              <option value="All">All Statuses</option>
-              <option value="Reported">Reported</option>
-              <option value="Acknowledged">Acknowledged</option>
-              <option value="Response in Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
+              <option value="All">{t('incidents.allStatuses', 'All Statuses')}</option>
+              <option value="Reported">{t('status.Reported', 'Reported')}</option>
+              <option value="Acknowledged">{t('status.Acknowledged', 'Acknowledged')}</option>
+              <option value="Response in Progress">{t('status.Response in Progress', 'In Progress')}</option>
+              <option value="Resolved">{t('status.Resolved', 'Resolved')}</option>
             </select>
           </div>
 
@@ -197,9 +202,9 @@ export const IncidentList: React.FC<IncidentListProps> = ({
               onChange={(e) => setSortBy(e.target.value as 'score' | 'depth' | 'recent')}
               className="w-full py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 font-medium focus:outline-none focus:border-cyan-500"
             >
-              <option value="score">Sort: Priority Score</option>
-              <option value="depth">Sort: Water Depth</option>
-              <option value="recent">Sort: Most Recent</option>
+              <option value="score">{t('incidents.sortScore', 'Sort: Priority Score')}</option>
+              <option value="depth">{t('incidents.sortDepth', 'Sort: Water Depth')}</option>
+              <option value="recent">{t('incidents.sortRecent', 'Sort: Most Recent')}</option>
             </select>
           </div>
         </div>
@@ -209,14 +214,16 @@ export const IncidentList: React.FC<IncidentListProps> = ({
       {filteredIncidents.length === 0 ? (
         <div className="p-12 text-center text-slate-400">
           <AlertTriangle className="w-8 h-8 mx-auto mb-2 opacity-40 text-amber-500" />
-          <p className="text-sm font-medium text-slate-600">No matching incidents found</p>
-          <p className="text-xs text-slate-400 mt-1">Try clearing filters or search terms</p>
+          <p className="text-sm font-medium text-slate-600">{t('incidents.noIncidents', 'No matching incidents found')}</p>
+          <p className="text-xs text-slate-400 mt-1">{t('incidents.clearFilters', 'Try clearing filters or search terms')}</p>
         </div>
       ) : viewFormat === 'cards' ? (
         /* CARDS VIEW */
         <div className="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredIncidents.map((incident) => {
             const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${incident.lat},${incident.lng}`;
+            const transSeverity = t(`severity.${incident.severity}`, incident.severity);
+            const transStatus = t(`status.${incident.status}`, incident.status);
 
             return (
               <div
@@ -236,10 +243,10 @@ export const IncidentList: React.FC<IncidentListProps> = ({
                     {/* Top badging */}
                     <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between">
                       <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border shadow-sm ${getSeverityBadgeClass(incident.severity)} bg-white`}>
-                        {incident.severity} ({incident.dispatchPriorityScore}/100)
+                        {transSeverity} ({incident.dispatchPriorityScore}/100)
                       </span>
                       <span className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${getStatusBadgeClass(incident.status)}`}>
-                        {incident.status}
+                        {transStatus}
                       </span>
                     </div>
 
@@ -272,17 +279,19 @@ export const IncidentList: React.FC<IncidentListProps> = ({
                     {/* Metric Pills */}
                     <div className="grid grid-cols-2 gap-2 bg-slate-50 p-2 rounded-lg border border-slate-100 text-xs">
                       <div>
-                        <span className="text-[10px] text-slate-400 block uppercase font-medium">Water Depth</span>
+                        <span className="text-[10px] text-slate-400 block uppercase font-medium">{t('map.waterDepth', 'Water Depth')}</span>
                         <span className="font-bold text-sky-700 flex items-center gap-1 font-mono">
                           🌊 {incident.waterDepthMeters.toFixed(2)} m
                         </span>
                       </div>
                       <div>
-                        <span className="text-[10px] text-slate-400 block uppercase font-medium">Stranded</span>
+                        <span className="text-[10px] text-slate-400 block uppercase font-medium">{t('map.stranded', 'Stranded')}</span>
                         <span className={`font-bold flex items-center gap-1 font-mono ${
                           incident.trappedCount > 0 ? 'text-red-600' : 'text-slate-600'
                         }`}>
-                          👥 {incident.trappedCount > 0 ? `${incident.trappedCount} Persons` : 'None'}
+                          👥 {incident.trappedCount > 0 
+                            ? `${incident.trappedCount} ${t('incidents.persons', { count: incident.trappedCount, defaultValue: 'Persons' })}` 
+                            : t('map.none', 'None')}
                         </span>
                       </div>
                     </div>
@@ -310,10 +319,10 @@ export const IncidentList: React.FC<IncidentListProps> = ({
                     target="_blank"
                     rel="noreferrer"
                     className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg text-xs font-medium flex items-center gap-1 transition"
-                    title="Open exact coordinates in Google Maps"
+                    title={t('map.googleMaps', 'Google Maps')}
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
-                    <span className="text-[11px]">Maps</span>
+                    <span className="text-[11px]">{t('map.googleMaps', 'Google Maps')}</span>
                   </a>
 
                   <button
@@ -323,7 +332,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
                     }}
                     className="px-3 py-1.5 bg-slate-900 hover:bg-cyan-600 text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition shadow-sm"
                   >
-                    <span>Manage Dispatch</span>
+                    <span>{t('incidents.manageDispatch', 'Manage Dispatch')}</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -337,37 +346,40 @@ export const IncidentList: React.FC<IncidentListProps> = ({
           <table className="w-full text-left text-xs text-slate-600">
             <thead className="bg-slate-50 text-slate-500 text-[11px] font-bold uppercase tracking-wider border-b border-slate-200">
               <tr>
-                <th className="py-3 px-4">Priority / Title</th>
-                <th className="py-3 px-4">Category</th>
-                <th className="py-3 px-4">Location / Ward</th>
-                <th className="py-3 px-4">Water Depth</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4 text-right">Actions</th>
+                <th className="py-3 px-4">{t('incidents.tablePriorityTitle', 'Priority / Title')}</th>
+                <th className="py-3 px-4">{t('incidents.tableCategory', 'Category')}</th>
+                <th className="py-3 px-4">{t('incidents.tableLocationWard', 'Location / Ward')}</th>
+                <th className="py-3 px-4">{t('incidents.tableWaterDepth', 'Water Depth')}</th>
+                <th className="py-3 px-4">{t('incidents.tableStatus', 'Status')}</th>
+                <th className="py-3 px-4 text-right">{t('incidents.tableActions', 'Actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filteredIncidents.map((incident) => {
                 const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${incident.lat},${incident.lng}`;
+                const transSeverity = t(`severity.${incident.severity}`, incident.severity);
+                const transStatus = t(`status.${incident.status}`, incident.status);
+                const transCategory = t(`category.${incident.category}`, incident.category);
 
                 return (
                   <tr key={incident.id} className="hover:bg-slate-50/80 transition">
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
                         <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${getSeverityBadgeClass(incident.severity)}`}>
-                          {incident.severity[0]}
+                          {transSeverity[0]}
                         </span>
                         <div>
                           <span className="font-bold text-slate-900 block truncate max-w-xs">
                             {incident.title}
                           </span>
                           <span className="text-[10px] text-slate-400 font-mono">
-                            Score: {incident.dispatchPriorityScore}/100 • {incident.reportedAt}
+                            {t('incidents.scorePrefix', { score: incident.dispatchPriorityScore, defaultValue: `Score: ${incident.dispatchPriorityScore}/100` })} • {incident.reportedAt}
                           </span>
                         </div>
                       </div>
                     </td>
                     <td className="py-3 px-4 font-medium text-slate-700">
-                      {incident.category}
+                      {transCategory}
                     </td>
                     <td className="py-3 px-4">
                       <span className="font-medium text-slate-800 block truncate max-w-[200px]">
@@ -383,13 +395,13 @@ export const IncidentList: React.FC<IncidentListProps> = ({
                       </span>
                       {incident.trappedCount > 0 && (
                         <span className="ml-1 text-[10px] font-bold text-red-600 bg-red-50 px-1 py-0.5 rounded">
-                          {incident.trappedCount} Trapped
+                          {t('incidents.persons', { count: incident.trappedCount, defaultValue: `${incident.trappedCount} Persons` })}
                         </span>
                       )}
                     </td>
                     <td className="py-3 px-4">
                       <span className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${getStatusBadgeClass(incident.status)}`}>
-                        {incident.status}
+                        {transStatus}
                       </span>
                     </td>
                     <td className="py-3 px-4 text-right">
@@ -399,7 +411,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
                           target="_blank"
                           rel="noreferrer"
                           className="p-1.5 text-slate-400 hover:text-blue-600 rounded"
-                          title="Open in Google Maps"
+                          title={t('map.googleMaps', 'Google Maps')}
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
                         </a>
@@ -410,7 +422,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
                           }}
                           className="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-700 text-white rounded-md text-[11px] font-semibold transition"
                         >
-                          SOP & Status
+                          {t('incidents.sopAndStatus', 'SOP & Status')}
                         </button>
                       </div>
                     </td>

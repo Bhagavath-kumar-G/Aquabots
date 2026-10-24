@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import type { Incident, RoverTelemetry, AppNotification, IncidentStatus, Severity, AppViewMode, ReliefShelter } from '../types';
+import type { Incident, RoverTelemetry, AppNotification, IncidentStatus, AppViewMode, ReliefShelter } from '../types';
 import { INITIAL_INCIDENTS, INITIAL_ROVER, INITIAL_NOTIFICATIONS, RELIEF_SHELTERS, DEMO_SCENARIOS } from '../data/mockData';
 import { calculateIncidentPriority } from '../utils/prioritization';
 import { playEmergencyAlertSound, playNotificationChime } from '../utils/audio';
@@ -59,9 +59,9 @@ interface AppContextType {
   resetToDefaultData: () => void;
 }
 
-const STORAGE_KEY_INCIDENTS = 'aquarescue_incidents_v1';
-const STORAGE_KEY_ROVER = 'aquarescue_rover_v1';
-const STORAGE_KEY_NOTIFS = 'aquarescue_notifs_v1';
+const STORAGE_KEY_INCIDENTS = 'drainpulse_incidents_v2';
+const STORAGE_KEY_ROVER = 'drainpulse_rover_v2';
+const STORAGE_KEY_NOTIFS = 'drainpulse_notifs_v2';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -331,7 +331,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       waterDepthMeters: report.waterDepthMeters,
       trappedCount: 0,
       hazards: ['Public SOS Incident'],
-      imageUrl: report.photoUrl || '/images/underpass_flood.jpg',
+      imageUrl: report.photoUrl || '/images/drainpulse/drain_inspection_waste.jpg',
       reportedAt: 'Just now',
       updatedAt: 'Just now',
       source: 'Citizen Report',
@@ -344,8 +344,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         {
           timestamp: 'Just now',
           status: 'Reported',
-          note: 'Public SOS submission received via AquaRescue Public Portal.',
-          author: report.reporterContact || 'Public Citizen'
+          note: 'Public blockage alert received via DrainPulse Panchayat Portal.',
+          author: report.reporterContact || 'Village Citizen'
         }
       ]
     };

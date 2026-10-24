@@ -1,22 +1,17 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useApp } from '../../context/AppContext';
 import type { Incident, IncidentStatus, Severity } from '../../types';
 import { 
   X, 
   MapPin, 
-  Droplets, 
-  Users, 
   ShieldAlert, 
   ExternalLink, 
   Clock, 
   CheckCircle2, 
   FileText, 
   Send, 
-  AlertTriangle,
-  UserCheck,
-  Download,
-  Share2,
-  Copy,
+  Copy, 
   Check
 } from 'lucide-react';
 
@@ -29,11 +24,9 @@ export const IncidentDetailModal: React.FC<IncidentDetailModalProps> = ({
   incident, 
   onClose 
 }) => {
+  const { t } = useTranslation();
   const { updateIncidentStatus } = useApp();
 
-  const [selectedStatus, setSelectedStatus] = useState<IncidentStatus>(
-    incident ? incident.status : 'Reported'
-  );
   const [assignedTeam, setAssignedTeam] = useState<string>(
     incident?.assignedTeam || 'SDRF Flood Unit Delta-2'
   );
@@ -61,14 +54,13 @@ export const IncidentDetailModal: React.FC<IncidentDetailModalProps> = ({
   ];
 
   const handleUpdate = (newStatus: IncidentStatus) => {
-    setSelectedStatus(newStatus);
     updateIncidentStatus(incident.id, newStatus, dispatchNote || undefined, assignedTeam);
     setDispatchNote('');
   };
 
   const handleCopySITREP = () => {
     const sitrep = `
-=== AQUARESCUE DISASTER SITUATION REPORT (SITREP) ===
+=== DRAINPULSE DRAIN INSPECTION SITUATION REPORT (SITREP) ===
 Incident ID: ${incident.id}
 Classification: ${incident.severity.toUpperCase()} (${incident.category})
 Priority Score: ${incident.dispatchPriorityScore}/100
@@ -109,6 +101,9 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
     }
   };
 
+  const transSeverity = t(`severity.${incident.severity}`, incident.severity);
+  const transCategory = t(`category.${incident.category}`, incident.category);
+
   return (
     <div className="fixed inset-0 z-[1000] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-sm animate-fade-in">
       <div 
@@ -119,13 +114,13 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
         <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
           <div className="flex items-center gap-3">
             <span className={`px-2.5 py-1 rounded-md text-xs font-black uppercase tracking-wider ${getSeverityBadgeClass(incident.severity)}`}>
-              {incident.severity}
+              {transSeverity}
             </span>
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs text-cyan-400 font-mono font-bold">{incident.id}</span>
                 <span className="text-slate-400">•</span>
-                <span className="text-xs text-slate-300 font-medium">{incident.category}</span>
+                <span className="text-xs text-slate-300 font-medium">{transCategory}</span>
               </div>
               <h3 className="font-bold text-base leading-tight text-white line-clamp-1">
                 {incident.title}
@@ -137,17 +132,17 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
             <button
               onClick={handleCopySITREP}
               className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition border border-slate-700"
-              title="Copy Military/Disaster SITREP text"
+              title={t('detail.copySitrep', 'Copy SITREP')}
             >
               {isCopied ? (
                 <>
                   <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-emerald-400">SITREP Copied</span>
+                  <span className="text-emerald-400">{t('detail.sitrepCopied', 'SITREP Copied')}</span>
                 </>
               ) : (
                 <>
                   <Copy className="w-3.5 h-3.5" />
-                  <span>Copy SITREP</span>
+                  <span>{t('detail.copySitrep', 'Copy SITREP')}</span>
                 </>
               )}
             </button>
@@ -175,7 +170,7 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
               <div className="absolute bottom-2.5 left-2.5 right-2.5 text-white text-xs">
                 <div className="font-mono text-cyan-300 text-[10px] flex items-center justify-between">
-                  <span>SOURCE: {incident.source}</span>
+                  <span>{t('detail.source', { source: incident.source, defaultValue: `SOURCE: ${incident.source}` })}</span>
                   <span>{incident.reportedAt}</span>
                 </div>
               </div>
@@ -192,7 +187,11 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
                       <h4 className="font-bold text-sm text-slate-900">{incident.locationName}</h4>
                       <p className="text-xs text-slate-500">{incident.ward}</p>
                       <p className="text-xs font-mono text-cyan-800 font-semibold mt-1">
-                        GPS: {incident.lat.toFixed(5)}° N, {incident.lng.toFixed(5)}° E
+                        {t('detail.gps', { 
+                          lat: incident.lat.toFixed(5), 
+                          lng: incident.lng.toFixed(5), 
+                          defaultValue: `GPS: ${incident.lat.toFixed(5)}° N, ${incident.lng.toFixed(5)}° E` 
+                        })}
                       </p>
                     </div>
                   </div>
@@ -202,7 +201,7 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
                     rel="noreferrer"
                     className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 transition shadow-sm shrink-0"
                   >
-                    <span>Google Maps</span>
+                    <span>{t('map.googleMaps', 'Google Maps')}</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
@@ -211,27 +210,27 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
               {/* Numerical Metrics Grid */}
               <div className="grid grid-cols-3 gap-2.5">
                 <div className="bg-sky-50 border border-sky-200/60 p-2.5 rounded-xl">
-                  <span className="text-[10px] text-sky-800 uppercase tracking-wider block font-semibold">Flood Depth</span>
+                  <span className="text-[10px] text-sky-800 uppercase tracking-wider block font-semibold">{t('detail.floodDepth', 'Flood Depth')}</span>
                   <div className="text-xl font-black text-sky-900 font-mono mt-0.5">
                     {incident.waterDepthMeters.toFixed(2)} <span className="text-xs font-normal">m</span>
                   </div>
-                  <span className="text-[10px] text-sky-700">Ultrasound Sensor</span>
+                  <span className="text-[10px] text-sky-700">{t('detail.ultrasoundSensor', 'Ultrasound Sensor')}</span>
                 </div>
 
                 <div className="bg-red-50 border border-red-200/60 p-2.5 rounded-xl">
-                  <span className="text-[10px] text-red-800 uppercase tracking-wider block font-semibold">Trapped Civilians</span>
+                  <span className="text-[10px] text-red-800 uppercase tracking-wider block font-semibold">{t('detail.trappedCivilians', 'Trapped Civilians')}</span>
                   <div className={`text-xl font-black font-mono mt-0.5 ${incident.trappedCount > 0 ? 'text-red-700' : 'text-slate-700'}`}>
-                    {incident.trappedCount} <span className="text-xs font-normal">people</span>
+                    {incident.trappedCount} <span className="text-xs font-normal">{t('detail.peopleCount', 'people')}</span>
                   </div>
-                  <span className="text-[10px] text-red-700">AI Optical Count</span>
+                  <span className="text-[10px] text-red-700">{t('detail.aiOpticalCount', 'AI Optical Count')}</span>
                 </div>
 
                 <div className="bg-purple-50 border border-purple-200/60 p-2.5 rounded-xl">
-                  <span className="text-[10px] text-purple-800 uppercase tracking-wider block font-semibold">Priority Score</span>
+                  <span className="text-[10px] text-purple-800 uppercase tracking-wider block font-semibold">{t('detail.priorityScore', 'Priority Score')}</span>
                   <div className="text-xl font-black text-purple-900 font-mono mt-0.5">
                     {incident.dispatchPriorityScore} <span className="text-xs font-normal">/100</span>
                   </div>
-                  <span className="text-[10px] text-purple-700">Triage Engine</span>
+                  <span className="text-[10px] text-purple-700">{t('detail.triageEngine', 'Triage Engine')}</span>
                 </div>
               </div>
 
@@ -246,7 +245,7 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
           <div className="bg-amber-50/70 border border-amber-200/80 rounded-xl p-4 space-y-1.5">
             <h4 className="text-xs font-bold text-amber-900 flex items-center gap-1.5 uppercase tracking-wide">
               <ShieldAlert className="w-4 h-4 text-amber-600" />
-              Automated Prioritization Rationale
+              {t('detail.rationale', 'Automated Prioritization Rationale')}
             </h4>
             <p className="text-xs text-amber-950 font-medium leading-relaxed">
               {incident.priorityReason}
@@ -257,7 +256,7 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2.5">
             <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
               <FileText className="w-4 h-4 text-cyan-600" />
-              Recommended Safety Guidance & Field SOPs
+              {t('detail.safetyGuidance', 'Recommended Safety Guidance & Field SOPs')}
             </h4>
             <ul className="space-y-1.5">
               {incident.safetyGuidelines.map((sop, idx) => (
@@ -276,7 +275,7 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
             <div>
               <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5 mb-2">
                 <Clock className="w-4 h-4 text-cyan-700" />
-                Incident Lifecycle & Dispatch State Machine
+                {t('detail.lifecycle', 'Incident Lifecycle & Dispatch State Machine')}
               </h4>
               
               {/* Stepper buttons */}
@@ -284,6 +283,7 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
                 {STATUS_FLOW.map((st, i) => {
                   const isCurrent = incident.status === st;
                   const stepNum = i + 1;
+                  const transStatus = t(`status.${st}`, st);
 
                   return (
                     <button
@@ -296,7 +296,7 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
                       }`}
                     >
                       <span>{stepNum}.</span>
-                      <span className="truncate">{st}</span>
+                      <span className="truncate">{transStatus}</span>
                     </button>
                   );
                 })}
@@ -307,7 +307,7 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-cyan-200/40">
               <div>
                 <label className="text-[11px] font-bold text-slate-700 block mb-1">
-                  Assigned Emergency Response Unit
+                  {t('detail.assignedUnit', 'Assigned Emergency Response Unit')}
                 </label>
                 <select
                   value={assignedTeam}
@@ -324,12 +324,12 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
 
               <div>
                 <label className="text-[11px] font-bold text-slate-700 block mb-1">
-                  Add Dispatcher Log Note
+                  {t('detail.addLogNote', 'Add Dispatcher Log Note')}
                 </label>
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="Enter dispatch notes, boat status, water pumps..."
+                    placeholder={t('detail.notePlaceholder', 'Enter dispatch notes, boat status, water pumps...')}
                     value={dispatchNote}
                     onChange={(e) => setDispatchNote(e.target.value)}
                     className="flex-1 py-1.5 px-3 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-cyan-600"
@@ -339,7 +339,7 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
                     className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition flex items-center gap-1 shrink-0"
                   >
                     <Send className="w-3.5 h-3.5" />
-                    <span>Log</span>
+                    <span>{t('detail.log', 'Log')}</span>
                   </button>
                 </div>
               </div>
@@ -350,7 +350,7 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
           <div className="space-y-2">
             <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              Incident Audit Trail & History
+              {t('detail.auditTrail', 'Incident Audit Trail & History')}
             </h4>
             <div className="divide-y divide-slate-100 border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
               {incident.history.map((hist, idx) => (
@@ -359,7 +359,7 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-slate-900">{hist.author}</span>
                       <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 border border-slate-200">
-                        {hist.status}
+                        {t(`status.${hist.status}`, hist.status)}
                       </span>
                     </div>
                     <p className="text-slate-600 mt-0.5">{hist.note}</p>
@@ -376,13 +376,13 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
         {/* Modal Footer */}
         <div className="px-6 py-3.5 bg-slate-100 border-t border-slate-200 flex items-center justify-between">
           <span className="text-xs text-slate-500 font-mono">
-            AquaRescue Ops • RTK GPS Synchronized
+            {t('detail.rtkSynced', 'DrainPulse Ops • Sensor Telemetry Stream (Sim)')}
           </span>
           <button
             onClick={onClose}
             className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition"
           >
-            Close Details
+            {t('detail.close', 'Close Details')}
           </button>
         </div>
       </div>
