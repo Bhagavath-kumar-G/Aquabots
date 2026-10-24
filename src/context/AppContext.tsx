@@ -3,6 +3,7 @@ import type { Incident, RoverTelemetry, AppNotification, IncidentStatus, AppView
 import { INITIAL_INCIDENTS, INITIAL_ROVER, INITIAL_NOTIFICATIONS, RELIEF_SHELTERS, DEMO_SCENARIOS } from '../data/mockData';
 import { calculateIncidentPriority } from '../utils/prioritization';
 import { playEmergencyAlertSound, playNotificationChime } from '../utils/audio';
+import { apiService } from '../services/api';
 
 interface AppContextType {
   incidents: Incident[];
@@ -37,6 +38,10 @@ interface AppContextType {
     newStatus: IncidentStatus, 
     note?: string, 
     assignedTeam?: string
+  ) => void;
+  updateIncidentDetails: (
+    incidentId: string,
+    updates: Partial<Incident>
   ) => void;
   
   // Simulation actions
@@ -133,11 +138,30 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, [notifications]);
 
+  // Sync from backend API on mount with graceful offline fallback
+  useEffect(() => {
+    let isMounted = true;
+    async function loadBackendComplaints() {
+      const backendComplaints = await apiService.getComplaints();
+      if (isMounted && backendComplaints && backendComplaints.length > 0) {
+        setIncidents(prev => {
+          const map = new Map(prev.map(i => [i.id, i]));
+          for (const b of backendComplaints) {
+            map.set(b.id, b);
+          }
+          return Array.from(map.values());
+        });
+      }
+    }
+    loadBackendComplaints();
+    return () => { isMounted = false; };
+  }, []);
+
   // Keep selected incident reference in sync if incidents update
   useEffect(() => {
     if (selectedIncident) {
       const updated = incidents.find(i => i.id === selectedIncident.id);
-      if (updated) setSelectedIncident(updated);
+      if (updated && updated !== selectedIncident) setSelectedIncident(updated);
     }
   }, [incidents, selectedIncident]);
 
@@ -198,6 +222,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       playNotificationChime();
     }
   }, [audioAlertsEnabled]);
+
+  const updateIncidentDetails = useCallback((
+    incidentId: string,
+    updates: Partial<Incident>
+  ) => {
+    setIncidents(prevIncidents => {
+      return prevIncidents.map(inc => {
+        if (inc.id !== incidentId) return inc;
+        return {
+          ...inc,
+          ...updates,
+          updatedAt: 'Just now'
+        };
+      });
+    });
+  }, []);
 
   // Simulate new Rover Observation with automated rule prioritization
   const simulateRoverObservation = useCallback((scenarioIndex?: number) => {
@@ -458,6 +498,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     toggleAudioAlerts,
     toggleSimulatePatrol,
     updateIncidentStatus,
+    updateIncidentDetails,
     simulateRoverObservation,
     triggerEmergencyAlertBroadcast,
     submitCitizenReport,

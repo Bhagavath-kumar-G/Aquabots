@@ -1,20 +1,57 @@
 export type Severity = 'Critical' | 'High' | 'Medium' | 'Low';
 
-export type IncidentStatus = 'Reported' | 'Acknowledged' | 'Response in Progress' | 'Resolved';
+export type IncidentStatus = 
+  | 'Submitted' 
+  | 'Under Review' 
+  | 'Assigned' 
+  | 'In Progress' 
+  | 'Resolved' 
+  | 'Reopened'
+  // Backward compatibility aliases
+  | 'Reported' 
+  | 'Acknowledged' 
+  | 'Response in Progress';
 
 export type IncidentCategory = 
+  | 'Blockage'
+  | 'Solid Waste'
+  | 'Severe Waterlogging'
+  | 'Infrastructure Damage'
   | 'Trapped Citizens' 
   | 'Submerged Vehicle' 
-  | 'Severe Waterlogging' 
   | 'Electrical Hazard' 
   | 'Structural Risk' 
   | 'Medical Emergency';
 
 export interface IncidentHistoryItem {
   timestamp: string;
+  fromStatus?: IncidentStatus;
   status: IncidentStatus;
   note: string;
   author: string;
+  evidenceUrl?: string;
+}
+
+export interface AiSuggestionData {
+  suggestedCategory: IncidentCategory;
+  confidence: number; // 0.0 - 1.0
+  reasoning: string;
+  detectedKeywords: string[];
+}
+
+export interface DuplicateFlagData {
+  isDuplicate: boolean;
+  duplicateOfId?: string;
+  similarityScore?: number;
+  reason?: string;
+  status: 'Unmerged' | 'Merged' | 'Dismissed';
+}
+
+export interface ResolutionEvidenceData {
+  verifiedBy: string;
+  verifiedAt: string;
+  note: string;
+  photoUrl?: string;
 }
 
 export interface Incident {
@@ -22,6 +59,7 @@ export interface Incident {
   title: string;
   description: string;
   category: IncidentCategory;
+  confirmedCategory?: IncidentCategory;
   severity: Severity;
   status: IncidentStatus;
   lat: number;
@@ -43,6 +81,10 @@ export interface Incident {
   history: IncidentHistoryItem[];
   verifiedByAi: boolean;
   reporterContact?: string;
+  reporterName?: string;
+  aiSuggestion?: AiSuggestionData;
+  duplicateFlag?: DuplicateFlagData;
+  resolutionEvidence?: ResolutionEvidenceData;
 }
 
 export interface RoverTelemetry {
@@ -90,4 +132,61 @@ export interface ReliefShelter {
   isOpen: boolean;
 }
 
-export type AppViewMode = 'command' | 'overview' | 'public';
+export interface RoadClosureItem {
+  id: string;
+  roadName: string;
+  sector: string;
+  coordinates: [number, number];
+  verificationStatus: 'Official' | 'Unverified' | 'Expired';
+  reportedAt: string;
+  verifiedAt?: string;
+  verifiedBy?: string;
+  expiresAt: string;
+  reason: string;
+  waterDepthMeters: number;
+  recommendedDetour?: string;
+}
+
+export interface PanchayatRiskZone {
+  id: string;
+  name: string;
+  ward: string;
+  coordinates: [number, number][];
+  riskLevel: 'Severe' | 'High' | 'Moderate' | 'Low';
+  rainfallMmHr: number;
+  waterLevelMeters: number;
+  activeIncidentsCount: number;
+  drainageCapacityPct: number;
+  dataSource: string;
+  lastUpdated: string;
+  scoringReasons: string[];
+  disclaimer: string;
+}
+
+export interface PanchayatAnalyticsData {
+  meta: {
+    dataSource: string;
+    lastUpdated: string;
+    datasetType: string;
+    disclaimer: string;
+  };
+  metrics: {
+    complaintVolume: number;
+    backlogCount: number;
+    resolvedCount: number;
+    avgResponseTimeHours: number;
+    avgResolutionTimeHours: number;
+    inspectionCoveragePct: number;
+    sensorAvailabilityPct: number;
+    activeHotspotsCount: number;
+    recurringHotspots: Array<{
+      location: string;
+      ward: string;
+      reportCount: number;
+      avgDepthMeters: number;
+      isRecurring: boolean;
+    }>;
+  };
+}
+
+export type AppViewMode = 'command' | 'overview' | 'public' | 'analytics';

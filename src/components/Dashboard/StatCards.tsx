@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useApp } from '../../context/AppContext';
 import { 
@@ -8,17 +8,19 @@ import {
   Activity, 
   Waves, 
   CloudRain, 
-  Compass,
-  ArrowUpRight
+  ArrowUpRight,
+  BarChart3
 } from 'lucide-react';
+import { PanchayatAnalyticsModal } from './PanchayatAnalyticsModal';
 
 export const StatCards: React.FC = () => {
   const { t } = useTranslation();
   const { incidents, setFilterSeverity, setFilterStatus } = useApp();
+  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
 
   const stats = useMemo(() => {
     const active = incidents.filter(i => i.status !== 'Resolved');
-    const critical = incidents.filter(i => i.severity === 'Critical' && i.status !== 'Resolved');
+    const critical = incidents.filter(i => (i.severity === 'Critical' || i.severity === 'High') && i.status !== 'Resolved');
     const waterlogging = incidents.filter(i => i.category === 'Severe Waterlogging' || i.waterDepthMeters > 0.5);
     const resolved = incidents.filter(i => i.status === 'Resolved');
     const trappedTotal = active.reduce((sum, i) => sum + i.trappedCount, 0);
@@ -62,10 +64,16 @@ export const StatCards: React.FC = () => {
               <Waves className="w-3.5 h-3.5 text-cyan-400" />
               <span>Drain Outflow: <strong>2,400 LPM</strong></span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Compass className="w-3.5 h-3.5 text-amber-400" />
-              <span>DrainPulse RP-1: <strong>Active Crawl</strong></span>
-            </div>
+            
+            {/* Panchayat Analytics Button */}
+            <button
+              onClick={() => setIsAnalyticsOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1 bg-cyan-600/30 hover:bg-cyan-600 text-cyan-200 hover:text-white border border-cyan-500/50 rounded-xl font-bold transition shadow-sm"
+              title="Open Panchayat Intelligence & Backlog Analytics"
+            >
+              <BarChart3 className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Panchayat Analytics</span>
+            </button>
           </div>
         </div>
       </div>
@@ -79,7 +87,7 @@ export const StatCards: React.FC = () => {
         >
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              {t('dashboard.activeIncidents', 'Active Incidents')}
+              {t('dashboard.activeIncidents', 'Active Complaints')}
             </span>
             <div className="w-8 h-8 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center">
               <Activity className="w-4 h-4" />
@@ -90,11 +98,11 @@ export const StatCards: React.FC = () => {
               {stats.activeCount}
             </span>
             <span className="text-xs font-semibold text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded-full">
-              {t('dashboard.liveTriage', 'Live Field Triage')}
+              {t('dashboard.liveTriage', 'Live Triage')}
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-2 flex items-center justify-between">
-            <span>{t('dashboard.involvedWards', { count: 4, defaultValue: 'Involved Wards: 4' })}</span>
+            <span>Involved Wards: 4</span>
             <span className="text-cyan-600 group-hover:translate-x-0.5 transition flex items-center text-[11px] font-bold">
               {t('dashboard.viewAll', 'View all')} <ArrowUpRight className="w-3 h-3" />
             </span>
@@ -109,7 +117,7 @@ export const StatCards: React.FC = () => {
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold text-red-800 uppercase tracking-wider flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-              {t('dashboard.criticalEmergencies', 'Critical Emergencies')}
+              {t('dashboard.criticalEmergencies', 'Critical & High SOS')}
             </span>
             <div className="w-8 h-8 rounded-xl bg-red-100 text-red-600 flex items-center justify-center">
               <ShieldAlert className="w-4 h-4" />
@@ -121,7 +129,7 @@ export const StatCards: React.FC = () => {
             </span>
             {stats.trappedTotal > 0 && (
               <span className="text-xs font-bold text-red-700 bg-red-100 px-2 py-0.5 rounded-full">
-                {t('dashboard.strandedLives', { count: stats.trappedTotal, defaultValue: `${stats.trappedTotal} Stranded Lives` })}
+                {stats.trappedTotal} Stranded Lives
               </span>
             )}
           </div>
@@ -140,7 +148,7 @@ export const StatCards: React.FC = () => {
         >
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold text-sky-800 uppercase tracking-wider">
-              {t('dashboard.waterloggingPoints', 'Waterlogging Points')}
+              {t('dashboard.waterloggingPoints', 'Culvert Ponding Points')}
             </span>
             <div className="w-8 h-8 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center">
               <Droplets className="w-4 h-4" />
@@ -151,11 +159,11 @@ export const StatCards: React.FC = () => {
               {stats.waterloggingCount}
             </span>
             <span className="text-xs font-semibold text-sky-700 bg-sky-100 px-2 py-0.5 rounded-full font-mono">
-              {t('dashboard.maxDepth', { depth: stats.maxDepth.toFixed(2), defaultValue: `Max: ${stats.maxDepth.toFixed(2)}m` })}
+              Max: {stats.maxDepth.toFixed(2)}m
             </span>
           </div>
           <p className="text-xs text-sky-700 mt-2 flex items-center justify-between">
-            <span>{t('dashboard.pumpsActive', 'Dewatering Pumps Active')}</span>
+            <span>Dewatering Pumps Active</span>
             <span className="text-sky-600 group-hover:translate-x-0.5 transition flex items-center text-[11px] font-bold">
               {t('dashboard.inspectDepth', 'Inspect Depth')} <ArrowUpRight className="w-3 h-3" />
             </span>
@@ -169,7 +177,7 @@ export const StatCards: React.FC = () => {
         >
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
-              {t('dashboard.resolvedCleared', 'Resolved & Cleared')}
+              {t('dashboard.resolvedCleared', 'Verified Resolved')}
             </span>
             <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
               <CheckCircle2 className="w-4 h-4" />
@@ -180,17 +188,23 @@ export const StatCards: React.FC = () => {
               {stats.resolvedCount}
             </span>
             <span className="text-xs font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-              {t('dashboard.safeDewatered', 'Safe & De-watered')}
+              Safe & De-watered
             </span>
           </div>
           <p className="text-xs text-emerald-700 mt-2 flex items-center justify-between">
-            <span>{t('dashboard.transitRestored', 'Transit Restored')}</span>
+            <span>Flow Restored</span>
             <span className="text-emerald-700 group-hover:translate-x-0.5 transition flex items-center text-[11px] font-bold">
               {t('dashboard.resolvedLog', 'Resolved Log')} <ArrowUpRight className="w-3 h-3" />
             </span>
           </p>
         </div>
       </div>
+
+      {/* Panchayat Analytics Modal */}
+      <PanchayatAnalyticsModal
+        isOpen={isAnalyticsOpen}
+        onClose={() => setIsAnalyticsOpen(false)}
+      />
     </div>
   );
 };
