@@ -77,8 +77,9 @@ router.post('/readings', async (req: Request, res: Response) => {
         : 'Telemetry reading successfully recorded',
       data: saved
     });
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 
@@ -92,8 +93,9 @@ router.get('/readings', async (req: Request, res: Response) => {
       count: readings.length,
       data: readings
     });
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 
@@ -126,8 +128,9 @@ router.get('/status', async (_req: Request, res: Response) => {
       activeDevicesCount: devices.length,
       data: devices
     });
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 
@@ -174,8 +177,9 @@ router.post('/simulate', async (req: Request, res: Response) => {
       notice: 'SIMULATED DATA: Visible label applied. Never presented as unvalidated live data.',
       data: saved
     });
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 

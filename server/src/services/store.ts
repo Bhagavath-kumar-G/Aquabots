@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { ComplaintModel } from '../models/Complaint.js';
+import type { ComplaintDocument } from '../models/Complaint.js';
 import { SensorReadingModel } from '../models/SensorReading.js';
 import { RoadClosureModel } from '../models/RoadClosure.js';
 import type { ComplaintRecord, SensorReadingRecord, RoadClosureRecord } from '../types/index.js';
@@ -235,7 +236,7 @@ export const dataStore = {
   // Complaints
   async getComplaints(filter?: { status?: string; category?: string; ward?: string }): Promise<ComplaintRecord[]> {
     if (isMongoConnected()) {
-      const query: any = {};
+      const query: mongoose.FilterQuery<ComplaintDocument> = {};
       if (filter?.status && filter.status !== 'All') query.status = filter.status;
       if (filter?.category && filter.category !== 'All') query.category = filter.category;
       if (filter?.ward && filter.ward !== 'All') query.panchayatWard = filter.ward;

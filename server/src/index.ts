@@ -1,8 +1,8 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import path from 'path';
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
+import mongoose, { ConnectOptions } from 'mongoose';
 import complaintsRouter from './routes/complaints.routes.js';
 import sensorsRouter from './routes/sensors.routes.js';
 import hazardsRouter from './routes/hazards.routes.js';
@@ -23,7 +23,7 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: (origin, callback) => {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
     if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
       callback(null, true);
     } else {
@@ -41,7 +41,7 @@ const uploadsPath = path.resolve(process.cwd(), 'uploads');
 app.use('/uploads', express.static(uploadsPath));
 
 // API Health Check
-app.get('/api/health', (_req, res) => {
+app.get('/api/health', (_req: Request, res: Response) => {
   res.json({
     status: 'online',
     timestamp: new Date().toISOString(),
@@ -57,30 +57,44 @@ app.use('/api/hazards', hazardsRouter);
 app.use('/api/analytics', analyticsRouter);
 
 // Centralized Error Handling Middleware
-app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+interface AppError extends Error {
+  status?: number;
+}
+
+app.use((err: AppError, _req: Request, res: Response, _next: NextFunction) => {
   console.error('[API Error]:', err);
-  const status = err.status || 500;
+  const status = typeof err.status === 'number' ? err.status : 500;
   res.status(status).json({
     success: false,
     error: err.message || 'Internal server error'
   });
 });
 
+// Explicit Mongoose connection options with ConnectOptions type
+const mongoOptions: ConnectOptions = {
+  serverSelectionTimeoutMS: 3000
+};
+
+const localMongoOptions: ConnectOptions = {
+  serverSelectionTimeoutMS: 2000
+};
+
 // Database connection & Server initialization
 async function startServer() {
   try {
     if (process.env.MONGODB_URI) {
       console.log('Connecting to MongoDB at configured MONGODB_URI...');
-      await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 3000 });
+      await mongoose.connect(MONGODB_URI, mongoOptions);
       console.log('✅ Connected to MongoDB successfully.');
     } else {
       console.log('ℹ️ No MONGODB_URI provided in environment. Attempting local connection or falling back to in-memory store.');
-      await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 2000 })
+      await mongoose.connect(MONGODB_URI, localMongoOptions)
         .then(() => console.log('✅ Connected to local MongoDB.'))
         .catch(() => console.log('⚡ Running in resilient standalone mode with memory/file store (MongoDB not detected). All features remain 100% functional.'));
     }
   } catch (err) {
-    console.warn('⚠️ MongoDB connection deferred. Running with resilient local store fallback:', (err as Error).message);
+    const errorMsg = err instanceof Error ? err.message : String(err);
+    console.warn('⚠️ MongoDB connection deferred. Running with resilient local store fallback:', errorMsg);
   }
 
   app.listen(PORT, () => {

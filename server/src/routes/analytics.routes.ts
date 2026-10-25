@@ -98,8 +98,9 @@ router.get('/panchayat', async (_req: Request, res: Response) => {
         recurringHotspots: recurringHotspots.slice(0, 5)
       }
     });
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 

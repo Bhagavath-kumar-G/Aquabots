@@ -151,9 +151,10 @@ router.post('/', upload.single('photo'), async (req: Request, res: Response) => 
       data: saved,
       duplicateAlert: duplicateFlag.isDuplicate ? duplicateFlag : undefined
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Server error';
     console.error('Error in complaint submission:', err);
-    return res.status(500).json({ success: false, error: err.message || 'Server error' });
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 
@@ -167,8 +168,9 @@ router.get('/', async (req: Request, res: Response) => {
       ward: ward as string
     });
     return res.json({ success: true, count: complaints.length, data: complaints });
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 
@@ -180,8 +182,9 @@ router.get('/:id', async (req: Request, res: Response) => {
       return res.status(404).json({ success: false, error: 'Complaint not found' });
     }
     return res.json({ success: true, data: complaint });
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 
@@ -278,8 +281,9 @@ router.patch('/:id/status', upload.single('resolutionPhoto'), async (req: Reques
     });
 
     return res.json({ success: true, data: updated });
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 
@@ -314,8 +318,9 @@ router.post('/:id/assign', async (req: Request, res: Response) => {
     });
 
     return res.json({ success: true, data: updated });
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 
@@ -362,8 +367,9 @@ router.post('/:id/confirm-category', async (req: Request, res: Response) => {
     });
 
     return res.json({ success: true, data: updated });
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 
@@ -421,8 +427,9 @@ router.post('/:id/duplicate-action', async (req: Request, res: Response) => {
 
       return res.json({ success: true, message: 'Duplicate flag dismissed', data: updated });
     }
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 

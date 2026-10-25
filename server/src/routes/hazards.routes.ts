@@ -37,8 +37,9 @@ router.get('/road-closures', async (_req: Request, res: Response) => {
       count: evaluated.length,
       data: evaluated
     });
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 
@@ -75,8 +76,9 @@ router.post('/road-closures', async (req: Request, res: Response) => {
 
     const saved = await dataStore.addRoadClosure(newClosure);
     return res.status(201).json({ success: true, data: saved });
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 
@@ -107,8 +109,9 @@ router.post('/safe-route-check', async (req: Request, res: Response) => {
         detour: c.recommendedDetour || 'Use main arterial highway'
       }))
     });
-  } catch (err: any) {
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ success: false, error: errorMsg });
   }
 });
 
