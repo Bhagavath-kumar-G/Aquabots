@@ -384,7 +384,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         {
           timestamp: 'Just now',
           status: 'Reported',
-          note: 'Public blockage alert received via DrainPulse Panchayat Portal.',
+          note: 'Public blockage alert received via Drain Plus Panchayat Portal.',
           author: report.reporterContact || 'Village Citizen'
         }
       ]

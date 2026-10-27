@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useApp } from '../../context/AppContext';
 import type { Incident, Severity, IncidentStatus } from '../../types';
 import { 
@@ -20,6 +21,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
   onSelectIncident,
   onOpenPriorityMatrix 
 }) => {
+  const { t } = useTranslation();
   const { 
     incidents, 
     filterSeverity, 
@@ -105,14 +107,14 @@ export const IncidentList: React.FC<IncidentListProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-lg font-bold text-slate-900 tracking-tight">
-                Panchayat Complaint Triage & Crew Priority Queue
+                {t('incidents.triageQueue', 'Panchayat Complaint Triage & Crew Priority Queue')}
               </h2>
               <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold">
-                {filteredIncidents.length} of {incidents.length} Records
+                {t('incidents.recordsCount', { filtered: filteredIncidents.length, total: incidents.length })}
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Ranked by transparent factors: depth, trapped lives, electrical hazards, school/health center proximity, and wait time.
+              {t('incidents.rankedBy', 'Ranked by transparent factors: depth, trapped lives, electrical hazards, school/health center proximity, and wait time.')}
             </p>
           </div>
 
@@ -124,7 +126,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
               title="Transparent Scoring Formula & Factor Breakdown"
             >
               <ShieldAlert className="w-3.5 h-3.5 text-cyan-600" />
-              <span>Prioritization Rules</span>
+              <span>{t('incidents.prioritizationRules', 'Prioritization Rules')}</span>
             </button>
 
             <div className="bg-slate-100 p-1 rounded-xl flex items-center gap-1 text-xs">
@@ -134,7 +136,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
                   viewFormat === 'cards' ? 'bg-white shadow text-slate-900 font-bold' : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
-                Cards
+                {t('incidents.cards', 'Cards')}
               </button>
               <button
                 onClick={() => setViewFormat('table')}
@@ -142,7 +144,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
                   viewFormat === 'table' ? 'bg-white shadow text-slate-900 font-bold' : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
-                Table
+                {t('incidents.table', 'Table')}
               </button>
             </div>
           </div>
@@ -155,7 +157,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search by location, hazard, ward, blockage keyword..."
+              placeholder={t('incidents.searchPlaceholder', 'Search by location, hazard, ward, blockage keyword...')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-3 py-2 bg-slate-50 hover:bg-slate-100/70 focus:bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition"
@@ -182,7 +184,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
                     : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
                 }`}
               >
-                {sev}
+                {sev === 'All' ? t('incidents.all', 'All') : t(`severity.${sev}`, sev)}
               </button>
             ))}
           </div>
@@ -194,13 +196,13 @@ export const IncidentList: React.FC<IncidentListProps> = ({
               onChange={(e) => setFilterStatus(e.target.value)}
               className="w-full py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 font-medium focus:outline-none focus:border-cyan-500"
             >
-              <option value="All">All Statuses</option>
-              <option value="Submitted">Submitted</option>
-              <option value="Under Review">Under Review</option>
-              <option value="Assigned">Assigned</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
-              <option value="Reopened">Reopened</option>
+              <option value="All">{t('incidents.allStatuses', 'All Statuses')}</option>
+              <option value="Submitted">{t('incidents.statusSubmitted', 'Submitted')}</option>
+              <option value="Under Review">{t('incidents.statusUnderReview', 'Under Review')}</option>
+              <option value="Assigned">{t('incidents.statusAssigned', 'Assigned')}</option>
+              <option value="In Progress">{t('incidents.statusInProgress', 'In Progress')}</option>
+              <option value="Resolved">{t('incidents.statusResolved', 'Resolved')}</option>
+              <option value="Reopened">{t('incidents.statusReopened', 'Reopened')}</option>
             </select>
           </div>
 
@@ -211,10 +213,10 @@ export const IncidentList: React.FC<IncidentListProps> = ({
               onChange={(e) => setSortBy(e.target.value as 'score' | 'depth' | 'recent' | 'waiting')}
               className="w-full py-2 px-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 font-medium focus:outline-none focus:border-cyan-500"
             >
-              <option value="score">Sort: Priority Score (High)</option>
-              <option value="depth">Sort: Water Depth (Deepest)</option>
-              <option value="waiting">Sort: Waiting Backlog</option>
-              <option value="recent">Sort: Most Recent</option>
+              <option value="score">{t('incidents.sortPriority', 'Sort: Priority Score (High)')}</option>
+              <option value="depth">{t('incidents.sortDepthDesc', 'Sort: Water Depth (Deepest)')}</option>
+              <option value="waiting">{t('incidents.sortWaiting', 'Sort: Waiting Backlog')}</option>
+              <option value="recent">{t('incidents.sortRecent', 'Sort: Most Recent')}</option>
             </select>
           </div>
         </div>
@@ -224,8 +226,8 @@ export const IncidentList: React.FC<IncidentListProps> = ({
       {filteredIncidents.length === 0 ? (
         <div className="p-12 text-center text-slate-400">
           <AlertTriangle className="w-8 h-8 mx-auto mb-2 opacity-40 text-amber-500" />
-          <p className="text-sm font-medium text-slate-600">No matching complaints found</p>
-          <p className="text-xs text-slate-400 mt-1">Try clearing filters or search terms</p>
+          <p className="text-sm font-medium text-slate-600">{t('incidents.noMatching', 'No matching complaints found')}</p>
+          <p className="text-xs text-slate-400 mt-1">{t('incidents.clearFiltersHint', 'Try clearing filters or search terms')}</p>
         </div>
       ) : viewFormat === 'cards' ? (
         /* CARDS VIEW */
@@ -344,7 +346,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
                     }}
                     className="px-3 py-1.5 bg-slate-900 hover:bg-cyan-600 text-white rounded-xl text-xs font-semibold flex items-center gap-1 transition shadow-sm"
                   >
-                    <span>Manage Dispatch</span>
+                    <span>{t('incidents.manageDispatch', 'Manage Dispatch')}</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -358,12 +360,12 @@ export const IncidentList: React.FC<IncidentListProps> = ({
           <table className="w-full text-left text-xs text-slate-600">
             <thead className="bg-slate-50 text-slate-500 text-[11px] font-bold uppercase tracking-wider border-b border-slate-200">
               <tr>
-                <th className="py-3 px-4">Priority / Title</th>
-                <th className="py-3 px-4">Category</th>
-                <th className="py-3 px-4">Location / Ward</th>
-                <th className="py-3 px-4">Assigned Crew</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4 text-right">Actions</th>
+                <th className="py-3 px-4">{t('incidents.tablePriorityTitle', 'Priority / Title')}</th>
+                <th className="py-3 px-4">{t('incidents.tableCategory', 'Category')}</th>
+                <th className="py-3 px-4">{t('incidents.tableLocationWard', 'Location / Ward')}</th>
+                <th className="py-3 px-4">{t('detail.assignedUnit', 'Assigned Crew')}</th>
+                <th className="py-3 px-4">{t('incidents.tableStatus', 'Status')}</th>
+                <th className="py-3 px-4 text-right">{t('incidents.tableActions', 'Actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -416,7 +418,7 @@ export const IncidentList: React.FC<IncidentListProps> = ({
                         }}
                         className="px-2.5 py-1 bg-slate-900 hover:bg-cyan-600 text-white rounded-lg text-xs font-semibold transition"
                       >
-                        Dispatch
+                        {t('incidents.manageDispatch', 'Dispatch')}
                       </button>
                     </td>
                   </tr>

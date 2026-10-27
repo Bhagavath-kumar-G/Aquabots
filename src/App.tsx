@@ -11,6 +11,7 @@ import { NotificationDrawer } from './components/Notifications/NotificationDrawe
 import { PublicPortal } from './components/Public/PublicPortal';
 import { JudgeGuideModal } from './components/Demo/JudgeGuideModal';
 import { ProjectOverview } from './components/ProjectOverview/ProjectOverview';
+import { AmbulanceRoutePlanner } from './components/Map/AmbulanceRoutePlanner';
 import type { Incident } from './types';
 import { ShieldCheck } from 'lucide-react';
 import './App.css';
@@ -30,7 +31,7 @@ const MainAppContent: React.FC = () => {
   const [isPriorityMatrixOpen, setIsPriorityMatrixOpen] = useState(false);
 
   React.useEffect(() => {
-    document.title = 'DrainPulse — Smart Storm-Drain Monitoring & Inspection Rover | AquaBots';
+    document.title = 'Drain Plus — Smart Storm-Drain Monitoring & Inspection Rover | AquaBots';
   }, []);
 
   const handleSelectIncident = (incident: Incident) => {
@@ -85,6 +86,9 @@ const MainAppContent: React.FC = () => {
               onOpenPriorityMatrix={() => setIsPriorityMatrixOpen(true)}
             />
           </div>
+        ) : viewMode === 'ambulance' ? (
+          /* Ambulance Flood-Aware Route Planner */
+          <AmbulanceRoutePlanner />
         ) : (
           /* Rural Panchayat Public Safety Portal Mode */
           <PublicPortal />
@@ -119,7 +123,7 @@ const MainAppContent: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-slate-300">
             <ShieldCheck className="w-4 h-4 text-cyan-400" />
-            <span className="font-bold text-white">DrainPulse</span>
+            <span className="font-bold text-white">Drain Plus</span>
             <span>— Smart Storm-Drain Monitoring & Inspection Rover</span>
           </div>
           <div className="flex items-center gap-1.5 text-slate-400">

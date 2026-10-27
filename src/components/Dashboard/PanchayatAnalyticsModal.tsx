@@ -33,7 +33,7 @@ export const PanchayatAnalyticsModal: React.FC<PanchayatAnalyticsModalProps> = (
       // Offline fallback calculation
       setData({
         meta: {
-          dataSource: 'AquaBots Panchayat Operational Database (Client Sync)',
+          dataSource: 'Drain Plus Panchayat Operational Database (Client Sync)',
           lastUpdated: new Date().toLocaleTimeString(),
           datasetType: 'Development & Field Demo Dataset (Calculated from active records; clearly labelled)',
           disclaimer: 'Transparent rule-based metrics calculated from stored incident and sensor telemetry. Never presented as an unvalidated blackbox prediction model.'
@@ -272,7 +272,7 @@ export const PanchayatAnalyticsModal: React.FC<PanchayatAnalyticsModalProps> = (
         {/* Footer */}
         <div className="px-6 py-3.5 bg-slate-100 border-t border-slate-200 flex items-center justify-between">
           <span className="text-xs text-slate-500 font-mono">
-            AquaBots Panchayat Intelligence Engine v2.0
+            Drain Plus Panchayat Intelligence Engine v2.0
           </span>
           <button
             onClick={onClose}

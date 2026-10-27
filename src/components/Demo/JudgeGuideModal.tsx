@@ -113,7 +113,7 @@ export const JudgeGuideModal: React.FC<JudgeGuideModalProps> = ({
                   Project Presentation & Engineering Design
                 </span>
                 <h4 className="font-bold text-sm text-slate-900">
-                  DrainPulse Architecture & Engineering Overview
+                  Drain Plus Architecture & Engineering Overview
                 </h4>
                 <p className="text-slate-600 text-[11px]">
                   Explore the ESP32 hardware close-up, pipeline workflow, engineering challenges, and rural panchayat impact.

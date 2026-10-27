@@ -48,31 +48,31 @@ export const StatCards: React.FC = () => {
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
             </span>
             <span className="font-bold text-slate-200 uppercase tracking-wider text-[11px]">
-              Drain & Culvert Flow Warning System:
+              {t('dashboard.flowWarning', 'Drain & Culvert Flow Warning System:')}
             </span>
             <span className="text-cyan-300 font-medium">
-              Pre-Monsoon Inspection Active • Ultrasonic Depth Sensing (Simulation Mode)
+              {t('dashboard.flowWarningText', 'Pre-Monsoon Inspection Active • Ultrasonic Depth Sensing (Simulation Mode)')}
             </span>
           </div>
 
           <div className="flex items-center gap-4 text-[11px] font-mono text-slate-300">
             <div className="flex items-center gap-1.5">
               <CloudRain className="w-3.5 h-3.5 text-sky-400" />
-              <span>Downpour: <strong>Heavy</strong></span>
+              <span>{t('dashboard.downpourLabel', 'Downpour:')} <strong>{t('dashboard.downpourHeavy', 'Heavy')}</strong></span>
             </div>
             <div className="flex items-center gap-1.5">
               <Waves className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Drain Outflow: <strong>2,400 LPM</strong></span>
+              <span>{t('dashboard.drainOutflow', 'Drain Outflow:')} <strong>2,400 LPM</strong></span>
             </div>
             
             {/* Panchayat Analytics Button */}
             <button
               onClick={() => setIsAnalyticsOpen(true)}
               className="flex items-center gap-1.5 px-3 py-1 bg-cyan-600/30 hover:bg-cyan-600 text-cyan-200 hover:text-white border border-cyan-500/50 rounded-xl font-bold transition shadow-sm"
-              title="Open Panchayat Intelligence & Backlog Analytics"
+              title={t('dashboard.panchayatAnalytics', 'Panchayat Analytics')}
             >
               <BarChart3 className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Panchayat Analytics</span>
+              <span>{t('dashboard.panchayatAnalytics', 'Panchayat Analytics')}</span>
             </button>
           </div>
         </div>
@@ -102,7 +102,7 @@ export const StatCards: React.FC = () => {
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-2 flex items-center justify-between">
-            <span>Involved Wards: 4</span>
+            <span>{t('dashboard.involvedWardsCount', { count: 4 })}</span>
             <span className="text-cyan-600 group-hover:translate-x-0.5 transition flex items-center text-[11px] font-bold">
               {t('dashboard.viewAll', 'View all')} <ArrowUpRight className="w-3 h-3" />
             </span>

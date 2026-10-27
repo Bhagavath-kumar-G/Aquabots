@@ -4,7 +4,7 @@ export const INITIAL_INCIDENTS: Incident[] = [
   {
     id: 'DP-2026-101',
     title: 'Ward 3 Sluice Culvert: Silt & Polythene Debris Damming Drain Flow',
-    description: 'DrainPulse RP-1 forward camera & ultrasonic sensor detected a dense blockage of discarded plastic polythene bags, wet leaves, and 24cm silt bed choking the underground culvert. Water pooling upstream at 0.72m.',
+    description: 'Drain Plus RP-1 forward inspection camera and ultrasonic obstacle sensor detected a dense blockage of discarded plastic polythene bags, wet leaves, and 24cm silt bed choking the underground culvert. Obstacle clearance estimated at 0.45m; water depth in model setup reads 0.72m.',
     category: 'Severe Waterlogging',
     severity: 'Critical',
     status: 'Reported',
@@ -18,7 +18,7 @@ export const INITIAL_INCIDENTS: Incident[] = [
     imageUrl: '/images/drainpulse/drain_inspection_waste.jpg',
     reportedAt: '12 mins ago',
     updatedAt: '3 mins ago',
-    source: 'DrainPulse RP-1' as any,
+    source: 'Drain Plus RP-1' as any,
     priorityReason: 'CRITICAL PRIORITY (Score: 88/100): 80% culvert cross-section blocked by polythene dam; urgent sanitation team dispatch required before monsoon inundates upstream farmland.',
     safetyGuidelines: [
       'Dispatch Panchayat Sanitation Desilting Squad with mechanical rakes & safety waders.',
@@ -28,13 +28,13 @@ export const INITIAL_INCIDENTS: Incident[] = [
     assignedTeam: 'Panchayat Sanitation Crew A-1',
     dispatchPriorityScore: 88,
     verifiedByAi: true,
-    reporterContact: 'DrainPulse RP-1 ESP32 Telemetry Node',
+    reporterContact: 'Drain Plus RP-1 ESP32 Telemetry Node',
     history: [
       {
         timestamp: '12 mins ago',
         status: 'Reported',
-        note: 'Ultrasonic sensor registered 0.72m standing water; camera captured polythene dam. Alert logged.',
-        author: 'DrainPulse ESP32-CAM'
+        note: 'Forward ultrasonic obstacle sensor registered 0.45m clearance to debris blockage; inspection camera logged polythene dam.',
+        author: 'Drain Plus ESP32-CAM'
       },
       {
         timestamp: '3 mins ago',
@@ -47,7 +47,7 @@ export const INITIAL_INCIDENTS: Incident[] = [
   {
     id: 'DP-2026-102',
     title: 'Main Road Subway Storm Drain: Submerged Silt & Construction Runoff',
-    description: 'Subway drainage conduit water depth measured at 0.58m by HC-SR04 ultrasonic sensor. Accumulation of loose construction gravel and mud obstructing gravity discharge to main canal.',
+    description: 'Subway drainage conduit inspection. Forward ultrasonic obstacle sensor registered rubble choke at 0.52m distance; water-level sensor measured 0.58m depth in test calibration flume. Silt and gravel obstructing gravity discharge.',
     category: 'Severe Waterlogging',
     severity: 'High',
     status: 'Response in Progress',
@@ -61,7 +61,7 @@ export const INITIAL_INCIDENTS: Incident[] = [
     imageUrl: '/images/drainpulse/water_level_monitoring.jpg',
     reportedAt: '38 mins ago',
     updatedAt: '8 mins ago',
-    source: 'DrainPulse RP-1' as any,
+    source: 'Drain Plus RP-1' as any,
     priorityReason: 'HIGH PRIORITY (Score: 74/100): Rising water level in primary drainage artery near public bus shelter.',
     safetyGuidelines: [
       'Deploy mechanical suction tanker to evacuate silt deposit.',
@@ -71,13 +71,13 @@ export const INITIAL_INCIDENTS: Incident[] = [
     assignedTeam: 'Panchayat Drainage Taskforce',
     dispatchPriorityScore: 74,
     verifiedByAi: true,
-    reporterContact: 'DrainPulse RP-1 ESP32 Telemetry Node',
+    reporterContact: 'Drain Plus RP-1 ESP32 Telemetry Node',
     history: [
       {
         timestamp: '38 mins ago',
         status: 'Reported',
-        note: 'Rover ultrasound sensor tagged water level 0.58m in drain.',
-        author: 'DrainPulse RP-1'
+        note: 'Rover forward obstacle sensor tagged blockage at 0.52m distance.',
+        author: 'Drain Plus RP-1'
       },
       {
         timestamp: '25 mins ago',
@@ -96,7 +96,7 @@ export const INITIAL_INCIDENTS: Incident[] = [
   {
     id: 'DP-2026-103',
     title: 'Primary Health Centre Approach: Flooded Drain Inundation',
-    description: 'DrainPulse camera identified fallen tree branches and municipal trash clogging the open roadside drain. Standing water 0.45m encroaching on clinic access path.',
+    description: 'Drain Plus camera identified fallen tree branches and municipal trash clogging the open roadside drain. Standing water 0.45m encroaching on clinic access path.',
     category: 'Structural Risk',
     severity: 'Medium',
     status: 'Reported',
@@ -124,7 +124,7 @@ export const INITIAL_INCIDENTS: Incident[] = [
       {
         timestamp: '1 hr ago',
         status: 'Reported',
-        note: 'Local nurse submitted photo via DrainPulse Citizen Portal.',
+        note: 'Local nurse submitted photo via Drain Plus Citizen Portal.',
         author: 'Citizen: Anitha M.'
       }
     ]
@@ -146,7 +146,7 @@ export const INITIAL_INCIDENTS: Incident[] = [
     imageUrl: '/images/drainpulse/hardware_esp32_closeup.jpg',
     reportedAt: '52 mins ago',
     updatedAt: '14 mins ago',
-    source: 'DrainPulse RP-1' as any,
+    source: 'Drain Plus RP-1' as any,
     priorityReason: 'CRITICAL PRIORITY (Score: 92/100): High-voltage electrical substation perimeter drain flooded; immediate utility coordination required.',
     safetyGuidelines: [
       'Notify State Electricity Board to verify earth wire insulation before crew enters.',
@@ -156,13 +156,13 @@ export const INITIAL_INCIDENTS: Incident[] = [
     assignedTeam: 'Electricity Board & Panchayat Joint Team',
     dispatchPriorityScore: 92,
     verifiedByAi: true,
-    reporterContact: 'DrainPulse RP-1 Acoustic Sonar & Camera',
+    reporterContact: 'Drain Plus RP-1 Camera & Ultrasonic Obstacle Sensor',
     history: [
       {
         timestamp: '52 mins ago',
         status: 'Reported',
-        note: 'DrainPulse optical scan flagged submerged electrical conduit.',
-        author: 'DrainPulse RP-1'
+        note: 'Drain Plus optical scan flagged submerged electrical conduit.',
+        author: 'Drain Plus RP-1'
       },
       {
         timestamp: '14 mins ago',
@@ -175,7 +175,7 @@ export const INITIAL_INCIDENTS: Incident[] = [
   {
     id: 'DP-2026-105',
     title: 'Canal Sluice Outfall Gate 2 Successfully Cleared & De-silted',
-    description: 'Sanitation squad removed 350kg of plastic bottles and silt. Water level restored to free-flowing baseline 0.08m. DrainPulse re-scan verified clear passage.',
+    description: 'Sanitation squad removed 350kg of plastic bottles and silt. Water level restored to free-flowing baseline 0.08m. Drain Plus re-scan verified clear passage.',
     category: 'Severe Waterlogging',
     severity: 'Low',
     status: 'Resolved',
@@ -189,11 +189,11 @@ export const INITIAL_INCIDENTS: Incident[] = [
     imageUrl: '/images/drainpulse/panchayat_control_room.jpg',
     reportedAt: '3 hrs ago',
     updatedAt: '20 mins ago',
-    source: 'DrainPulse RP-1' as any,
+    source: 'Drain Plus RP-1' as any,
     priorityReason: 'LOW PRIORITY (Score: 12/100): Canal outflow completely cleared; free gravity drainage verified by rover post-inspection.',
     safetyGuidelines: [
       'Normal agricultural water flow operational.',
-      'Schedule next periodic DrainPulse inspection in 14 days.'
+      'Schedule next periodic Drain Plus inspection in 14 days.'
     ],
     assignedTeam: 'Panchayat Sanitation Crew A-1',
     dispatchPriorityScore: 12,
@@ -203,7 +203,7 @@ export const INITIAL_INCIDENTS: Incident[] = [
         timestamp: '3 hrs ago',
         status: 'Reported',
         note: 'Rover tagged 0.65m clog at canal outfall sluice.',
-        author: 'DrainPulse RP-1'
+        author: 'Drain Plus RP-1'
       },
       {
         timestamp: '1.5 hrs ago',
@@ -214,7 +214,7 @@ export const INITIAL_INCIDENTS: Incident[] = [
       {
         timestamp: '20 mins ago',
         status: 'Resolved',
-        note: 'Water level lowered to 0.08m. DrainPulse re-run confirmed clear passage.',
+        note: 'Water level lowered to 0.08m. Drain Plus re-run confirmed clear passage.',
         author: 'Panchayat Operations'
       }
     ]
@@ -223,7 +223,7 @@ export const INITIAL_INCIDENTS: Incident[] = [
 
 export const INITIAL_ROVER: RoverTelemetry = {
   id: 'DP-RP-01',
-  name: 'DrainPulse RP-1 (ESP32-CAM)',
+  name: 'Drain Plus RP-1 (ESP32-CAM)',
   status: 'Patrolling',
   battery: 88,
   signalStrength: 85,
@@ -252,7 +252,7 @@ export const INITIAL_NOTIFICATIONS: AppNotification[] = [
   {
     id: 'NOTIF-1',
     title: 'CRITICAL: Ward 3 Sluice Culvert Clogged',
-    message: 'DrainPulse RP-1 detected 24cm silt bed and heavy plastic bags blocking underground culvert. Water pooling at 0.72m.',
+    message: 'Drain Plus RP-1 detected 24cm silt bed and heavy plastic bags blocking underground culvert. Water pooling at 0.72m.',
     timestamp: '12m ago',
     severity: 'Critical',
     read: false,
@@ -270,7 +270,7 @@ export const INITIAL_NOTIFICATIONS: AppNotification[] = [
   {
     id: 'NOTIF-3',
     title: 'ESP32 Wi-Fi Telemetry Synchronized',
-    message: 'DrainPulse RP-1 connected to Panchayat Wi-Fi AP. Ultrasonic distance sensor calibrated at 0.28m water baseline.',
+    message: 'Drain Plus RP-1 connected to Panchayat Wi-Fi AP. Forward ultrasonic obstacle sensor (₹80–₹200) and water-level sensor (₹250–₹800) baseline verified.',
     timestamp: '1h ago',
     severity: 'Info',
     read: true
@@ -337,7 +337,7 @@ export const DEMO_SCENARIOS = [
     lat: 12.9695,
     lng: 80.2085,
     imageUrl: '/images/drainpulse/drain_inspection_waste.jpg',
-    source: 'DrainPulse RP-1' as const
+    source: 'Drain Plus RP-1' as const
   },
   {
     title: 'Rising Stormwater Level Near Village Bus Depot Underpass',
@@ -350,7 +350,7 @@ export const DEMO_SCENARIOS = [
     lat: 13.0290,
     lng: 80.2245,
     imageUrl: '/images/drainpulse/water_level_monitoring.jpg',
-    source: 'DrainPulse RP-1' as const
+    source: 'Drain Plus RP-1' as const
   },
   {
     title: 'Fallen Branches & Plastic Waste at Clinic Drain Inlet',
@@ -363,7 +363,7 @@ export const DEMO_SCENARIOS = [
     lat: 12.9890,
     lng: 80.1890,
     imageUrl: '/images/drainpulse/hero_drain_rover.jpg',
-    source: 'DrainPulse RP-1' as const
+    source: 'Drain Plus RP-1' as const
   },
   {
     title: 'Submerged Earth Wire Near Substation Boundary Ditch',
@@ -376,7 +376,7 @@ export const DEMO_SCENARIOS = [
     lat: 12.9735,
     lng: 80.2350,
     imageUrl: '/images/drainpulse/hardware_esp32_closeup.jpg',
-    source: 'DrainPulse RP-1' as const
+    source: 'Drain Plus RP-1' as const
   }
 ];
 

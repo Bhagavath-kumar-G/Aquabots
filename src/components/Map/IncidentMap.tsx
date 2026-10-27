@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { useTranslation } from 'react-i18next';
 import { useApp } from '../../context/AppContext';
 import { apiService } from '../../services/api';
 import type { Incident, RoadClosureItem, PanchayatRiskZone } from '../../types';
@@ -9,7 +10,8 @@ import {
   Layers, 
   Droplets,
   AlertTriangle,
-  X
+  X,
+  Navigation
 } from 'lucide-react';
 
 interface IncidentMapProps {
@@ -94,13 +96,15 @@ const PANCHAYAT_RISK_ZONES: PanchayatRiskZone[] = [
 ];
 
 export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) => {
+  const { t } = useTranslation();
   const { 
     incidents, 
     rover, 
     filterSeverity, 
     focusedCoordinates, 
     setFocusedCoordinates,
-    setSelectedIncident 
+    setSelectedIncident,
+    setViewMode
   } = useApp();
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -525,14 +529,24 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
       <div className="absolute top-3 left-3 right-3 z-[400] flex flex-wrap items-center justify-between gap-2 pointer-events-none">
         <div className="pointer-events-auto flex items-center gap-2 bg-slate-900/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-slate-700/60 shadow-xl text-white">
           <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></div>
-          <span className="text-xs font-bold tracking-tight">AquaBots Tactical Panchayat Flood Map</span>
+          <span className="text-xs font-bold tracking-tight">{t('dashboard.tacticalMap', 'Drain Plus Tactical Culvert Map')}</span>
           <span className="text-[10px] bg-cyan-950 text-cyan-300 font-mono px-2 py-0.5 rounded border border-cyan-800">
-            {displayedIncidents.length} Hazards Active
+            {displayedIncidents.length} {t('map.markersActive', 'Hazards Active')}
           </span>
         </div>
 
-        {/* Layer Controls */}
+        {/* Layer Controls & Ambulance Shortcut */}
         <div className="pointer-events-auto flex items-center gap-1.5 bg-slate-900/90 backdrop-blur-md p-1 rounded-xl border border-slate-700/60 shadow-xl">
+          {/* Ambulance Routing Shortcut Button */}
+          <button
+            onClick={() => setViewMode('ambulance')}
+            title={t('map.planAmbulanceRoute', 'Plan Ambulance Route')}
+            className="px-2.5 py-1 bg-red-600/30 hover:bg-red-600 text-red-200 hover:text-white border border-red-500/50 rounded-lg text-[11px] font-bold flex items-center gap-1 transition shadow-sm"
+          >
+            <Navigation className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">{t('nav.ambulanceRoute', 'Ambulance Route')}</span>
+          </button>
+
           {/* Tile layer switcher */}
           <div className="flex bg-slate-800 rounded-lg p-0.5 text-xs text-slate-300">
             <button
@@ -541,7 +555,7 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
                 mapStyle === 'streets' ? 'bg-cyan-500 text-slate-950 font-bold shadow' : 'hover:text-white'
               }`}
             >
-              Street
+              {t('map.street', 'Street')}
             </button>
             <button
               onClick={() => setMapStyle('dark')}
@@ -549,7 +563,7 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
                 mapStyle === 'dark' ? 'bg-cyan-500 text-slate-950 font-bold shadow' : 'hover:text-white'
               }`}
             >
-              Tactical
+              {t('map.tactical', 'Tactical')}
             </button>
             <button
               onClick={() => setMapStyle('satellite')}
@@ -557,7 +571,7 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
                 mapStyle === 'satellite' ? 'bg-cyan-500 text-slate-950 font-bold shadow' : 'hover:text-white'
               }`}
             >
-              Satellite
+              {t('map.satellite', 'Satellite')}
             </button>
           </div>
 
@@ -574,7 +588,7 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
             }`}
           >
             <Droplets className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline text-[11px]">Risk Zones</span>
+            <span className="hidden sm:inline text-[11px]">{t('map.floodIngress', 'Risk Zones')}</span>
           </button>
 
           {/* Toggle Road Closures & Safe Routes */}
@@ -588,7 +602,7 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
             }`}
           >
             <AlertTriangle className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline text-[11px]">Closures</span>
+            <span className="hidden sm:inline text-[11px]">{t('map.officialClosure', 'Closures')}</span>
           </button>
 
           {/* Focus Rover */}
@@ -598,13 +612,13 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
             className="px-2.5 py-1 bg-cyan-600/20 hover:bg-cyan-600/40 text-cyan-300 border border-cyan-500/40 rounded-lg text-[11px] font-medium flex items-center gap-1 transition"
           >
             <Compass className="w-3.5 h-3.5" />
-            <span>Mark-IV</span>
+            <span>{t('map.roverMarkIV', 'Rover RP-1')}</span>
           </button>
 
           {/* Fit Bounds */}
           <button
             onClick={handleFitAllIncidents}
-            title="Fit All Hazards in View"
+            title={t('map.fitAll', 'Fit All Hazards in View')}
             className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition"
           >
             <Layers className="w-3.5 h-3.5" />
@@ -705,35 +719,35 @@ export const IncidentMap: React.FC<IncidentMapProps> = ({ onSelectIncident }) =>
           </div>
 
           <div className="p-2 bg-amber-500/10 border border-amber-500/30 rounded-xl text-[10px] text-amber-300 leading-tight">
-            <strong>Routing Safety Notice:</strong> Never claim a route is safe based only on an unverified complaint. Confirmed bypass routes require field officer validation.
+            <strong>{t('map.routingNotice', 'Routing Safety Notice: Never claim a route is safe based only on an unverified complaint. Confirmed bypass routes require field officer validation.')}</strong>
           </div>
         </div>
       )}
 
       {/* Bottom Floating Legend Bar */}
       <div className="absolute bottom-3 left-3 z-[400] bg-slate-900/90 backdrop-blur-md px-3 py-2 rounded-2xl border border-slate-700/60 shadow-xl text-white text-[11px] flex flex-wrap items-center gap-3">
-        <span className="text-slate-400 font-semibold text-[10px] uppercase tracking-wider">Hazards:</span>
+        <span className="text-slate-400 font-semibold text-[10px] uppercase tracking-wider">{t('map.severity', 'Hazards:')}</span>
         <div className="flex items-center gap-1">
           <span className="w-2.5 h-2.5 rounded-full bg-red-600"></span>
-          <span className="font-medium text-red-300">Critical</span>
+          <span className="font-medium text-red-300">{t('severity.Critical', 'Critical')}</span>
         </div>
         <div className="flex items-center gap-1">
           <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-          <span className="font-medium text-amber-300">High</span>
+          <span className="font-medium text-amber-300">{t('severity.High', 'High')}</span>
         </div>
         <div className="flex items-center gap-1">
           <span className="w-2.5 h-2.5 rounded-full bg-sky-500"></span>
-          <span className="font-medium text-sky-300">Medium</span>
+          <span className="font-medium text-sky-300">{t('severity.Medium', 'Medium')}</span>
         </div>
         <div className="flex items-center gap-1">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-          <span className="font-medium text-emerald-300">Resolved</span>
+          <span className="font-medium text-emerald-300">{t('status.Resolved', 'Resolved')}</span>
         </div>
 
         <div className="hidden md:flex items-center gap-2 pl-2 border-l border-slate-700 text-[10px]">
-          <span className="text-rose-400 font-bold">⛔ Official Closure</span>
-          <span className="text-amber-400 font-bold">⚠️ Unverified Hazard</span>
-          <span className="text-cyan-300 font-mono">🤖 Rover Active</span>
+          <span className="text-rose-400 font-bold">⛔ {t('map.officialClosure', 'Official Closure')}</span>
+          <span className="text-amber-400 font-bold">⚠️ {t('map.unverifiedHazard', 'Unverified Hazard')}</span>
+          <span className="text-cyan-300 font-mono">🤖 {t('map.roverActive', 'Rover Active')}</span>
         </div>
       </div>
     </div>

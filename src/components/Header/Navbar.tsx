@@ -12,7 +12,8 @@ import {
   Users, 
   Activity,
   Cpu,
-  Droplets
+  Droplets,
+  Navigation
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -44,7 +45,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button 
               onClick={() => setViewMode('overview')}
               className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 via-blue-600 to-indigo-600 shadow-lg shadow-cyan-500/20 text-white font-black text-lg hover:scale-105 transition"
-              title="DrainPulse - Project Overview"
+              title="Drain Plus - Project Overview"
             >
               <Droplets className="w-5 h-5 text-white" />
               <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-slate-900 rounded-full animate-pulse"></div>
@@ -56,7 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => setViewMode('overview')}
                   className="font-extrabold text-base sm:text-lg tracking-tight text-white font-sans text-left hover:text-cyan-400 transition"
                 >
-                  Drain<span className="text-cyan-400">Pulse</span>
+                  Drain<span className="text-cyan-400"> Plus</span>
                 </button>
                 <span className="hidden sm:inline-flex px-1.5 py-0.5 text-[9px] font-bold rounded bg-emerald-950 text-emerald-300 border border-emerald-800 uppercase tracking-wider font-mono">
                   AquaBots
@@ -64,13 +65,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
               <p className="text-[11px] text-slate-400 hidden lg:flex items-center gap-1.5">
                 <Radio className="w-3 h-3 text-emerald-400 animate-pulse" />
-                <span>Smart Storm-Drain Monitoring & Inspection Rover</span>
+                <span>{t('nav.taglineSubtitle', 'Smart Storm-Drain Monitoring & Inspection Rover')}</span>
               </p>
             </div>
           </div>
 
-          {/* Center: View Switcher (Overview vs Live Monitor vs Panchayat Portal) */}
-          <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs shrink-0">
+          {/* Center: View Switcher (Overview vs Live Monitor vs Ambulance Route vs Panchayat Portal) */}
+          <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs shrink-0 overflow-x-auto">
             <button
               onClick={() => setViewMode('overview')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition ${
@@ -78,10 +79,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   ? 'bg-cyan-500 text-slate-950 shadow-md font-bold'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
-              title="Project Concept, Hardware & Engineering Design"
+              title={t('nav.projectConcept', 'Project Concept')}
             >
               <Cpu className="w-3.5 h-3.5" />
-              <span>Project Concept</span>
+              <span className="hidden md:inline">{t('nav.projectConcept', 'Project Concept')}</span>
+              <span className="md:hidden">Concept</span>
             </button>
 
             <button
@@ -91,10 +93,24 @@ export const Navbar: React.FC<NavbarProps> = ({
                   ? 'bg-cyan-500 text-slate-950 shadow-md font-bold'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
-              title="Live Tactical Map, Rover Telemetry & Blockage Triage"
+              title={t('nav.govCommand', 'Live Monitor')}
             >
               <Activity className="w-3.5 h-3.5" />
-              <span>Live Monitor</span>
+              <span>{t('nav.govCommand', 'Live Monitor')}</span>
+            </button>
+
+            <button
+              onClick={() => setViewMode('ambulance')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition ${
+                viewMode === 'ambulance'
+                  ? 'bg-cyan-500 text-slate-950 shadow-md font-bold'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+              title={t('nav.ambulanceRoute', 'Ambulance Route')}
+            >
+              <Navigation className="w-3.5 h-3.5 text-red-400" />
+              <span className="hidden sm:inline">{t('nav.ambulanceRoute', 'Ambulance Route')}</span>
+              <span className="sm:hidden">Route</span>
             </button>
 
             <button
@@ -104,10 +120,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                   ? 'bg-cyan-500 text-slate-950 shadow-md font-bold'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
-              title="Rural Panchayat Community Safety & Citizen Reporting"
+              title={t('nav.publicPortal', 'Panchayat Portal')}
             >
               <Users className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Panchayat Portal</span>
+              <span className="hidden sm:inline">{t('nav.publicPortal', 'Panchayat Portal')}</span>
               <span className="sm:hidden">Portal</span>
             </button>
           </div>
@@ -124,7 +140,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               title={t('nav.judgeTour', 'Interactive Demo Tour')}
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Interactive Tour</span>
+              <span>{t('nav.judgeTour', 'Interactive Tour')}</span>
             </button>
 
             {/* Audio Alert Toggle */}

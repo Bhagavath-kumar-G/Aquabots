@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useApp } from '../../context/AppContext';
 import { apiService } from '../../services/api';
 import type { Incident, IncidentStatus, Severity, IncidentCategory } from '../../types';
@@ -27,6 +28,7 @@ export const IncidentDetailModal: React.FC<IncidentDetailModalProps> = ({
   incident, 
   onClose 
 }) => {
+  const { t } = useTranslation();
   const { updateIncidentStatus, updateIncidentDetails } = useApp();
 
   const [assignedTeam, setAssignedTeam] = useState<string>(
@@ -162,7 +164,7 @@ export const IncidentDetailModal: React.FC<IncidentDetailModalProps> = ({
 
   const handleCopySITREP = () => {
     const sitrep = `
-=== AQUABOTS PANCHAYAT DRAINAGE SITREP ===
+=== DRAIN PLUS PANCHAYAT DRAINAGE SITREP ===
 Incident ID: ${incident.id}
 Classification: ${incident.severity.toUpperCase()} (${incident.category})
 Confirmed Category: ${incident.confirmedCategory || incident.category}
@@ -609,13 +611,13 @@ ${incident.history.map(h => `[${h.timestamp}] [${h.status}] ${h.author}: ${h.not
         {/* Modal Footer */}
         <div className="px-6 py-3.5 bg-slate-100 border-t border-slate-200 flex items-center justify-between">
           <span className="text-xs text-slate-500 font-mono">
-            AquaBots Ops Engine • Verified Audit Trail Active
+            Drain Plus Ops Engine • Verified Audit Trail Active
           </span>
           <button
             onClick={onClose}
             className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition shadow-sm"
           >
-            Close Details
+            {t('detail.close', 'Close Details')}
           </button>
         </div>
       </div>

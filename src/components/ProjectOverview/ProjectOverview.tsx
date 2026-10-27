@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { 
   Cpu, 
   Wifi, 
@@ -16,7 +17,8 @@ import {
   Leaf,
   Building2,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  Gauge
 } from 'lucide-react';
 
 interface ProjectOverviewProps {
@@ -28,17 +30,18 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
   onNavigateToDashboard,
   onNavigateToPublic
 }) => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'all' | 'workflow' | 'hardware' | 'engineering' | 'impact'>('all');
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
 
   const workflowSteps = [
     {
       step: '01',
-      title: 'Optical & Ultrasonic Sensing',
-      desc: 'Forward-facing camera captures high-contrast video while an HC-SR04 ultrasonic sound transducer measures water surface distance clearance in narrow channels.',
+      title: 'Visual Inspection & Dual Sensors',
+      desc: 'Forward ESP32-CAM captures high-contrast drain footage, an ultrasonic obstacle sensor estimates distance to blockages, and a water-level sensor measures depth in controlled test setups.',
       icon: Eye,
       color: 'from-cyan-500 to-blue-600',
-      badge: 'Hardware Sensor'
+      badge: 'Dual Sensing Array'
     },
     {
       step: '02',
@@ -84,40 +87,46 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
 
   const hardwareSpecs = [
     {
-      name: 'ESP32-CAM Microcontroller',
-      role: 'Core Edge Processor & Camera Interface',
-      details: 'Dual-core Xtensa 32-bit LX6 @ 240MHz, 520KB SRAM + 4MB external PSRAM, integrated 2.4GHz Wi-Fi (802.11 b/g/n).',
-      status: 'Implemented'
+      name: 'Obstacle Sensor (Ultrasonic Module)',
+      price: '₹80–₹200',
+      role: 'Forward Distance Estimation',
+      details: 'An ultrasonic sensor can estimate the distance to an obstacle. Readings may be unreliable around splashing water or angled surfaces. A suitable protected sensor should be selected for wet environments.',
+      status: 'Prototyped'
     },
     {
-      name: 'HC-SR04 Ultrasonic Acoustic Sensor',
-      role: 'Non-Contact Water Depth Monitoring',
-      details: '40kHz sonic echo pulses measuring 2cm to 400cm surface distance with 3mm precision, angled downward for drain flow clearance.',
+      name: 'Water-Level Sensing Module',
+      price: '₹250–₹800',
+      role: 'Controlled Setup Depth Measurement',
+      details: 'Measures water level in a controlled test setup. A waterproof sensor suitable for the intended installation is preferable to an ordinary exposed electronics module.',
+      status: 'Bench Tested'
+    },
+    {
+      name: 'ESP32-CAM Microcontroller',
+      price: '₹600–₹850',
+      role: 'Core Edge Processor & Camera Interface',
+      details: 'Dual-core Xtensa 32-bit LX6 @ 240MHz, integrated OV2640 camera, 2.4GHz Wi-Fi (802.11 b/g/n) for telemetry uplink and visual drain inspection.',
       status: 'Implemented'
     },
     {
       name: 'L298N Dual H-Bridge Motor Driver',
+      price: '₹150–₹220',
       role: 'Mobility & Mud Traction Drive',
       details: 'Drives four high-torque yellow TT geared DC motors paired with knobby rubber wheels to navigate wet leaves and silt deposits.',
       status: 'Implemented'
     },
     {
       name: 'Power & Voltage Regulation',
+      price: '₹450–₹700',
       role: 'Dual 18650 Li-ion Battery Pack',
       details: '7.4V nominal configuration with LM2596 high-efficiency buck converter stepping down to filtered 5V rail for stable sensor operations.',
       status: 'Implemented'
     },
     {
-      name: 'IP65 Water-Resistant Enclosure',
+      name: 'Splash-Resistant Enclosure & Chassis',
+      price: '₹400–₹650',
       role: 'Electronics & Wiring Protection',
       details: 'Polycarbonate transparent project box with silicone sealing gasket and rubberized cable glands preventing splash and moisture ingress.',
       status: 'Implemented'
-    },
-    {
-      name: 'Subterranean Flash Queue (Offline Buffer)',
-      role: 'Intermittent Connectivity Resilience',
-      details: 'Caches telemetry logs to SPIFFS flash during deep culvert signal attenuation and auto-bursts queued data when rejoining Wi-Fi.',
-      status: 'Firmware Feature'
     }
   ];
 
@@ -125,7 +134,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
     {
       title: 'Water & Silt Ingress Protection',
       problem: 'Storm drains are damp, muddy environments where splashes, condensation, and chemical runoffs can destroy exposed electronics.',
-      solution: 'The rover mounts all sensitive microelectronics, batteries, and drivers inside an IP65 transparent sealed enclosure with rubberized pass-through glands, keeping electrical components dry while wheels traverse standing water.',
+      solution: 'The rover mounts microelectronics, batteries, and drivers inside a splash-resistant transparent enclosure with rubberized pass-through glands, protecting electrical components while wheels traverse shallow standing water in controlled tests. Industrial waterproofing is recommended for raw culverts.',
       tag: 'Enclosure Engineering'
     },
     {
@@ -196,37 +205,37 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
           <div className="lg:col-span-7 space-y-4">
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold uppercase tracking-wider">
-                AquaBots
+                {t('overview.projectTag', 'AquaBots')}
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-xs font-bold uppercase tracking-wider">
                 <Award className="w-3.5 h-3.5 text-cyan-400" />
-                Autonomous Storm-Drain Inspection
+                {t('overview.badge', 'Autonomous Storm-Drain Inspection')}
               </span>
             </div>
 
             <div className="space-y-1">
               <div className="text-xs uppercase font-extrabold tracking-widest text-slate-400">
-                Village & Panchayat Development • Agriculture & Rural Economy
+                {t('overview.sectorTag', 'Village & Panchayat Development • Agriculture & Rural Economy')}
               </div>
               <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-                DrainPulse
+                {t('overview.title', 'Drain Plus')}
               </h1>
               <p className="text-lg sm:text-xl font-bold bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">
-                Detect Blockages Early. Prevent Flooding Before It Starts.
+                {t('overview.headline', 'Detect Blockages Early. Prevent Flooding Before It Starts.')}
               </p>
             </div>
 
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
-              An affordable, compact, ESP32-powered robotic rover designed to inspect narrow stormwater drains, identify waste and blockages, monitor rising water levels, and transmit real-time alerts to a web dashboard over Wi-Fi.
+              {t('overview.subheading', 'An affordable, compact, ESP32-powered robotic rover designed to inspect narrow stormwater drains, identify waste and blockages, monitor rising water levels, and transmit real-time alerts to a web dashboard over Wi-Fi.')}
             </p>
 
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm space-y-1.5 text-xs text-slate-300">
               <div className="flex items-center gap-2 font-bold text-cyan-400">
                 <CheckCircle className="w-4 h-4 shrink-0 text-cyan-400" />
-                <span>The Core Engineering Mission</span>
+                <span>{t('overview.missionTitle', 'The Core Engineering Mission')}</span>
               </div>
               <p className="leading-relaxed text-slate-300">
-                In rural panchayats and suburban zones, blocked roadside culverts choke silently with plastic waste and silt. Manual inspection is slow and hazardous. DrainPulse provides student-buildable, low-cost robotics that gives village authorities early warnings before heavy monsoon downpours turn minor clogs into disastrous inundations.
+                {t('overview.missionDesc', 'In rural panchayats and suburban zones, blocked roadside culverts choke silently with plastic waste and silt. Manual inspection is slow and hazardous. Drain Plus provides student-buildable, low-cost robotics that gives village authorities early warnings before heavy monsoon downpours turn minor clogs into disastrous inundations.')}
               </p>
             </div>
 
@@ -235,7 +244,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
                 onClick={onNavigateToDashboard}
                 className="px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold rounded-xl text-xs sm:text-sm flex items-center gap-2 transition shadow-lg shadow-cyan-500/25"
               >
-                <span>Launch Live Rover Monitor</span>
+                <span>{t('overview.launchMonitor', 'Launch Live Rover Monitor')}</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
 
@@ -243,13 +252,13 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
                 onClick={onNavigateToPublic}
                 className="px-4 py-2.5 bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white font-semibold rounded-xl text-xs sm:text-sm border border-slate-700 flex items-center gap-2 transition"
               >
-                <span>Panchayat Public Portal</span>
+                <span>{t('overview.publicPortal', 'Panchayat Public Portal')}</span>
                 <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
               </button>
 
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-mono font-medium">
                 <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                <span>Dashboard in Simulation Mode</span>
+                <span>{t('overview.simulationBadge', 'Dashboard in Simulation Mode')}</span>
               </div>
             </div>
           </div>
@@ -262,7 +271,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
             >
               <img 
                 src="/images/drainpulse/hero_drain_rover.jpg" 
-                alt="DrainPulse compact rover operating inside narrow stormwater drain"
+                alt="Drain Plus compact rover prototype with forward ultrasonic obstacle sensor and clear enclosure operating in stormwater culvert"
                 className="w-full h-72 sm:h-84 object-cover object-center group-hover:scale-105 transition duration-500"
                 loading="eager"
               />
@@ -270,7 +279,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
               
               <div className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-slate-700 text-[10px] font-mono text-cyan-300 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
-                <span>DrainPulse RP-1 • Concrete Culvert Test</span>
+                <span>Drain Plus RP-1 • Concrete Culvert Test</span>
               </div>
 
               <div className="absolute top-3 right-3 p-1.5 rounded-lg bg-black/60 text-slate-300 hover:text-white">
@@ -279,10 +288,10 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
 
               <div className="absolute bottom-3 left-3 right-3 text-white">
                 <p className="text-xs font-bold leading-snug">
-                  Active Culvert Crawl: Forward Camera + Ultrasonic Echo Sensor
+                  Active Culvert Crawl: Forward Ultrasonic Obstacle Sensor + Inspection Camera
                 </p>
                 <p className="text-[11px] text-slate-300 mt-0.5 line-clamp-1">
-                  Navigating wet leaves, plastic debris, and standing drain water.
+                  Navigating wet leaves, plastic debris, and standing drain water with forward obstacle detection.
                 </p>
               </div>
             </div>
@@ -331,7 +340,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
               System Architecture & Data Pipeline
             </span>
             <h2 className="text-xl sm:text-2xl font-black text-white">
-              How DrainPulse Works — From Drain Floor to Panchayat Action
+              How Drain Plus Works — From Drain Floor to Panchayat Action
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 max-w-3xl">
               A clean 6-stage operational pipeline: ultrasonic sound waves and optical cameras capture the drain condition, the ESP32 processes sensor inputs locally, and data transmits wirelessly to village decision-makers.
@@ -384,7 +393,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
             <div className="flex items-center gap-2.5">
               <Compass className="w-5 h-5 text-cyan-400 shrink-0" />
               <span>
-                <strong>Integrated Pipeline:</strong> Camera + Ultrasonic Sensor → ESP32 → On-Device Triage → Wi-Fi Uplink → Panchayat Dashboard → Field Dispatch.
+                <strong>Integrated Pipeline:</strong> ESP32-CAM + Ultrasonic Obstacle Sensor (₹80–₹200) + Water-Level Sensor (₹250–₹800) → On-Device Triage → Wi-Fi Uplink → Panchayat Dashboard → Field Dispatch.
               </span>
             </div>
             <span className="text-[10px] bg-cyan-500/20 text-cyan-300 px-2.5 py-1 rounded-lg border border-cyan-400/30 font-mono shrink-0">
@@ -405,7 +414,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
               Hardware Architecture & Component Stack
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 max-w-3xl">
-              Built using accessible, off-the-shelf maker components. Any engineering student or village IT coordinator can assemble, calibrate, and service the rover locally.
+              Built using accessible, off-the-shelf maker components in India. Any engineering student or village IT coordinator can assemble, calibrate, and service the rover locally.
             </p>
           </div>
 
@@ -418,7 +427,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
               >
                 <img 
                   src="/images/drainpulse/hardware_esp32_closeup.jpg" 
-                  alt="DrainPulse hardware close-up: ESP32-CAM, ultrasonic sensor, L298N driver and Li-ion pack on workbench"
+                  alt="Drain Plus hardware close-up: ESP32-CAM, ultrasonic obstacle sensor, water-level sensing probe, L298N driver and Li-ion pack on workbench"
                   className="w-full h-80 sm:h-96 object-cover group-hover:scale-105 transition duration-500"
                   loading="lazy"
                 />
@@ -427,8 +436,8 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
                   Maker Lab Workbench Prototype
                 </div>
                 <div className="absolute bottom-3 left-3 right-3 text-white">
-                  <h4 className="text-sm font-bold">DrainPulse Chassis Layout</h4>
-                  <p className="text-xs text-slate-300">ESP32-CAM, HC-SR04, L298N Motor Driver, and Dual 18650 Battery Pack.</p>
+                  <h4 className="text-sm font-bold">Drain Plus Prototype Component Layout</h4>
+                  <p className="text-xs text-slate-300">ESP32-CAM, Ultrasonic Obstacle Sensor (₹80–₹200), Water-Level Sensor (₹250–₹800), L298N Driver, and Dual 18650 Battery Pack.</p>
                 </div>
               </div>
             </div>
@@ -443,6 +452,9 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-xs text-white">{spec.name}</span>
+                      <span className="text-[10px] font-mono font-bold text-amber-300 bg-amber-950/60 border border-amber-800/40 px-1.5 py-0.5 rounded">
+                        {spec.price}
+                      </span>
                       <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/60 px-1.5 py-0.5 rounded border border-cyan-800/40">
                         {spec.role}
                       </span>
@@ -456,6 +468,91 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
                   </span>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Hardware Indicative Price Breakdown & BOM Section */}
+          <div className="mt-6 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900/90 to-indigo-950/40 border border-indigo-800/40 p-5 space-y-4 shadow-xl">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+              <div>
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <DollarSign className="w-4 h-4 text-emerald-400" />
+                  Hardware Component Price Breakdown & Sensor Reality
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Component Bill of Materials (BOM) designed for low-cost, student-buildable panchayat drain monitoring.
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold text-emerald-300 bg-emerald-950/90 border border-emerald-700/60 px-3 py-1 rounded-xl shadow-sm">
+                  Estimated Total Build: ₹2,250 – ₹3,920 (&lt; ₹4,500)
+                </span>
+              </div>
+            </div>
+
+            {/* Two Primary Sensors Highlight Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-4 rounded-2xl bg-slate-950/90 border border-cyan-800/60 space-y-2.5 shadow-inner">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                      <Eye className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-xs text-white">Obstacle Sensor</h4>
+                      <span className="text-[10px] text-cyan-400 font-mono">Forward Obstacle Distance</span>
+                    </div>
+                  </div>
+                  <span className="font-mono font-black text-sm text-cyan-300 bg-cyan-950 border border-cyan-700 px-2.5 py-1 rounded-xl">
+                    ₹80–₹200
+                  </span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  An ultrasonic sensor can estimate the distance to an obstacle. Readings may be unreliable around splashing water or angled surfaces. A suitable protected sensor should be selected for wet environments.
+                </p>
+                <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                  <span>Physical Position:</span>
+                  <span className="text-cyan-300 font-semibold">Front bumper, 2 circular transducers forward</span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-950/90 border border-sky-800/60 space-y-2.5 shadow-inner">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                      <Gauge className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-xs text-white">Water-Level Sensing</h4>
+                      <span className="text-[10px] text-sky-400 font-mono">Controlled Test Setup Depth</span>
+                    </div>
+                  </div>
+                  <span className="font-mono font-black text-sm text-sky-300 bg-sky-950 border border-sky-700 px-2.5 py-1 rounded-xl">
+                    ₹250–₹800
+                  </span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Measures water level in a controlled test setup. A waterproof sensor suitable for the intended installation is preferable to an ordinary exposed electronics module.
+                </p>
+                <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                  <span>Physical Position:</span>
+                  <span className="text-sky-300 font-semibold">Lower chassis side bracket into drain flume</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Indicative Price Disclaimer & Technical Reality Banner */}
+            <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200 space-y-1.5">
+              <div className="flex items-center gap-2 font-bold text-amber-300">
+                <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Indicative Component Prices & Technical Verification Notice</span>
+              </div>
+              <p className="text-[11px] text-amber-100/90 leading-relaxed">
+                These are indicative component prices in India; verify current prices before purchasing.
+              </p>
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                <strong>Technical Accuracy:</strong> Simulated sensor readings are not depicted as real hardware measurements. Do not claim waterproofing or live water-level detection until the selected hardware supports it.
+              </p>
             </div>
           </div>
         </section>
@@ -485,7 +582,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
               >
                 <img 
                   src="/images/drainpulse/engineering_design_schematic.jpg" 
-                  alt="DrainPulse technical engineering schematic blueprint breakdown"
+                  alt="Drain Plus technical engineering schematic blueprint breakdown showing ultrasonic obstacle sensor and water-level sensor"
                   className="w-full h-80 sm:h-96 object-cover group-hover:scale-105 transition duration-500"
                   loading="lazy"
                 />
@@ -494,8 +591,8 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
                   Exploded View Technical Blueprint
                 </div>
                 <div className="absolute bottom-3 left-3 right-3 text-white">
-                  <h4 className="text-sm font-bold">Sealed Enclosure & Sensor Placement Blueprint</h4>
-                  <p className="text-xs text-slate-300">Gasketed wiring glands, LED illumination angle, and ultrasonic acoustic cone.</p>
+                  <h4 className="text-sm font-bold">Exploded View Technical Blueprint & Sensor Placement</h4>
+                  <p className="text-xs text-slate-300">Leader lines clearly label the forward ultrasonic obstacle sensor (₹80–₹200) and downward water-level sensor (₹250–₹800).</p>
                 </div>
               </div>
             </div>
@@ -520,7 +617,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
                     <strong className="text-slate-300">Challenge:</strong> {ch.problem}
                   </p>
                   <p className="text-[11px] text-cyan-300/90 leading-snug">
-                    <strong className="text-cyan-400">DrainPulse Solution:</strong> {ch.solution}
+                    <strong className="text-cyan-400">Drain Plus Solution:</strong> {ch.solution}
                   </p>
                 </div>
               ))}
@@ -543,7 +640,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
               <div className="absolute bottom-3 left-3 right-3 text-white">
                 <span className="text-[10px] font-mono text-amber-400 uppercase font-bold block">Observation Field Test</span>
                 <h5 className="font-bold text-xs">Visual Debris Clog Identification</h5>
-                <p className="text-[11px] text-slate-300">Rover lights illuminate trapped plastic polythene and silt dam.</p>
+                <p className="text-[11px] text-slate-300">Dual headlights illuminate plastic polythene and silt dam; forward ultrasonic obstacle sensor gauges distance to obstruction.</p>
               </div>
             </div>
 
@@ -553,15 +650,15 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
             >
               <img 
                 src="/images/drainpulse/water_level_monitoring.jpg" 
-                alt="Rover measuring water depth using downward ultrasonic distance sensor"
+                alt="Rover measuring water depth using water-level sensing module in controlled drain model"
                 className="w-full h-56 object-cover group-hover:scale-105 transition duration-300"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
               <div className="absolute bottom-3 left-3 right-3 text-white">
                 <span className="text-[10px] font-mono text-cyan-400 uppercase font-bold block">Sensor Telemetry Test</span>
-                <h5 className="font-bold text-xs">Ultrasonic Water Level Measurement</h5>
-                <p className="text-[11px] text-slate-300">Acoustic distance beam verifies water depth from elevated dry culvert bench.</p>
+                <h5 className="font-bold text-xs">Water-Level Sensing in Controlled Drain Model</h5>
+                <p className="text-[11px] text-slate-300">Water-level sensing module measures depth in controlled test channel flume. (₹250–₹800; waterproof sensor recommended for wet installation).</p>
               </div>
             </div>
           </div>
@@ -579,7 +676,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
               Impact on Village & Panchayat Development, Agriculture & Rural Economy
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 max-w-3xl">
-              DrainPulse addresses critical rural and panchayat drainage needs by delivering tangible, pro-poor civic technology that protects rural livelihoods and dignity.
+              Drain Plus addresses critical rural and panchayat drainage needs by delivering tangible, pro-poor civic technology that protects rural livelihoods and dignity.
             </p>
           </div>
 
@@ -592,7 +689,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
               >
                 <img 
                   src="/images/drainpulse/panchayat_control_room.jpg" 
-                  alt="Rural village panchayat office showing laptop running DrainPulse dashboard"
+                  alt="Rural village panchayat office showing laptop running Drain Plus dashboard"
                   className="w-full h-80 sm:h-96 object-cover group-hover:scale-105 transition duration-500"
                   loading="lazy"
                 />
@@ -646,7 +743,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
       {/* CTA Footer Card */}
       <div className="p-6 rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 text-center space-y-3">
         <h3 className="text-base sm:text-lg font-bold text-white">
-          Experience DrainPulse in Action
+          Experience Drain Plus in Action
         </h3>
         <p className="text-xs text-slate-300 max-w-xl mx-auto">
           Explore the live interactive tactical map, inspect culvert camera snapshots, test automated triage rules, or browse verified panchayat safety advisories.
@@ -677,7 +774,7 @@ export const ProjectOverview: React.FC<ProjectOverviewProps> = ({
           <div className="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center">
             <img 
               src={enlargedImage} 
-              alt="Enlarged DrainPulse Project Asset"
+              alt="Enlarged Drain Plus Project Asset"
               className="max-h-[85vh] w-auto rounded-2xl shadow-2xl border border-slate-700 object-contain"
             />
             <p className="text-xs text-slate-400 mt-2">Click anywhere to close preview</p>

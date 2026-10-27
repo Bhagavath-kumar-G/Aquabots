@@ -73,7 +73,7 @@ export interface Incident {
   thumbnailUrl?: string;
   reportedAt: string;
   updatedAt: string;
-  source: 'DrainPulse RP-1' | 'DrainPulse ESP32 Rover' | 'AquaRover Mark-IV' | 'AquaRover Mark-II' | 'Citizen Report' | 'Aerial Drone';
+  source: 'Drain Plus RP-1' | 'DrainPulse RP-1' | 'DrainPulse ESP32 Rover' | 'AquaRover Mark-IV' | 'AquaRover Mark-II' | 'Citizen Report' | 'Aerial Drone';
   priorityReason: string;
   safetyGuidelines: string[];
   assignedTeam?: string;
@@ -189,4 +189,43 @@ export interface PanchayatAnalyticsData {
   };
 }
 
-export type AppViewMode = 'command' | 'overview' | 'public' | 'analytics';
+export type AppViewMode = 'command' | 'overview' | 'public' | 'analytics' | 'ambulance';
+
+export type RoadConditionStatus = 
+  | 'Reported Clear' 
+  | 'Flooded / Blocked' 
+  | 'Caution' 
+  | 'Unknown / Unverified';
+
+export interface RouteHazardSegment {
+  id: string;
+  name: string;
+  condition: RoadConditionStatus;
+  waterDepthMeters?: number;
+  reportedAt?: string;
+  verificationStatus: 'Official' | 'Unverified' | 'Expired';
+  reason?: string;
+  coordinates: [number, number];
+}
+
+export interface AmbulanceRouteResult {
+  isDemo: boolean;
+  provider: 'OSRM' | 'Demo-Engine';
+  primaryRoute: {
+    coordinates: [number, number][];
+    distanceKm: number;
+    durationMinutes: number;
+    hazardsAvoidedCount: number;
+    overallCondition: RoadConditionStatus;
+    advisory: string;
+  };
+  alternativeRoute?: {
+    coordinates: [number, number][];
+    distanceKm: number;
+    durationMinutes: number;
+    name: string;
+    description: string;
+  };
+  segments: RouteHazardSegment[];
+  lastUpdated: string;
+}
